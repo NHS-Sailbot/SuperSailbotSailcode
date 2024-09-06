@@ -16,7 +16,7 @@ public:
     static void Print(const __FlashStringHelper * message);
 
 private:
-    static const char* FlashStringHelperToString(const __FlashStringHelper* message);
+    static const char* PrintFlashStringHelper(const __FlashStringHelper* message);
     static bool IsSetup;
     static HardwareSerial* LoggerSerial;
     static constexpr unsigned long LOGGER_BAUD_RATE = 9600;
