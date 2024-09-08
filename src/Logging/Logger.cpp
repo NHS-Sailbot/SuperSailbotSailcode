@@ -1,42 +1,52 @@
-﻿// Preprocessor directives: ARDUINO_AVR_MEGA2560, ARDUINO_GIGA_M7
-
-#include "Logger.h"
+﻿#include "Logger.h"
 
 namespace Logging {
-    bool Logger::IsSetup = false;
-    HardwareSerial *Logger::LoggerSerial = nullptr;
+    bool Logger::HasBegun = false;
+    HardwareSerial *Logger::LoggingSerial = nullptr;
 
-    void Logger::SetupLogging(HardwareSerial *serial) {
-        LoggerSerial = serial;
-        LoggerSerial->begin(LOGGER_BAUD_RATE);
-        IsSetup = true;
-    }
-
-    void Logger::Print(const char* message) {
-        LoggerSerial->print(message);
-    }
-    void Logger::PrintLine(const char* message) {
-        Print(message);
-        Print("\n");
+    void Logger::Begin(HardwareSerial *serial, const unsigned long baudRate) {
+        LoggingSerial = serial;
+        LoggingSerial->begin(baudRate);
+        HasBegun = true;
     }
 
-    void Logger::Print(const __FlashStringHelper* message) {
-        PrintFlashStringHelper(message);
+    void Logger::Print(const char *message) {
+        PrintToSerial(message);
+        PrintToFile(message);
     }
-    void Logger::PrintLine(const __FlashStringHelper* message) {
-        PrintFlashStringHelper(message);
-        Print("\n");
+
+    void Logger::Println(const char *message) {
+        PrintToSerial(message);
+        PrintToSerial("\n");
+        PrintToFile(message);
+        PrintToSerial("\n");
     }
-    const char* Logger::PrintFlashStringHelper(const __FlashStringHelper *message) {
-#if defined(__AVR__) // This is some AVR-specific code, idk what it's doing or how it works. Taken from Print.cpp.
+
+    void Logger::Print(const __FlashStringHelper *message) {
+#if defined(__AVR__)
         PGM_P p = reinterpret_cast<PGM_P>(message);
         while (true) {
             char c = pgm_read_byte(p++);
             if (c == 0) { break; }
-            Print(&c);
+            PrintToSerial(&c);
+            PrintToFile(&c);
         }
 #else
-        Print(reinterpret_cast<const char *>(message));
+        const char *messagePtr = reinterpret_cast<const char *>(message);
+        PrintToSerial(messagePtr);
+        PrintToFile(messagePtr);
 #endif
+    }
+
+    void Logger::Println(const __FlashStringHelper *message) {
+        Print(message);
+        Print("\n");
+    }
+
+    void Logger::PrintToSerial(const char *message) {
+        LoggingSerial->print(message);
+    }
+
+    void Logger::PrintToFile(const char *message) {
     }
 }

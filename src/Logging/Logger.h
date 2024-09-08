@@ -2,26 +2,24 @@
 #define LOGGER_H
 
 #include <Arduino.h>
-#include <HardwareSerial.h>
 
 namespace Logging {
 
 class Logger {
 public:
-    static void SetupLogging(HardwareSerial* serial);
-    static void PrintLine(const char* message);
+    static void Begin(HardwareSerial* serial, unsigned long baudRate);
     static void Print(const char* message);
-
-    static void PrintLine(const __FlashStringHelper * message);
-    static void Print(const __FlashStringHelper * message);
-
+    static void Println(const char* message);
+    static void Print(const __FlashStringHelper* message);
+    static void Println(const __FlashStringHelper* message);
 private:
-    static const char* PrintFlashStringHelper(const __FlashStringHelper* message);
-    static bool IsSetup;
-    static HardwareSerial* LoggerSerial;
-    static constexpr unsigned long LOGGER_BAUD_RATE = 9600;
+    static bool HasBegun;
+    static HardwareSerial* LoggingSerial;
+    static void PrintToSerial(const char* message);
+    static void PrintToFile(const char* message);
 };
 
 }
+
 
 #endif

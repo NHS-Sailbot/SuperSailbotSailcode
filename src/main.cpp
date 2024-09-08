@@ -4,10 +4,11 @@
 using namespace Logging;
 
 void setup() {
-    Logger::SetupLogging(&Serial);
+    Logger::Begin(&Serial, 115200);
 }
 
+// the loop function runs over and over again forever
 void loop() {
-    Logger::PrintLine(F("Hello, world!"));
-    Serial.println(F("Hello, world!"));
+    Logger::Println(F("Hello, world!"));
+    delay(1000);
 }
