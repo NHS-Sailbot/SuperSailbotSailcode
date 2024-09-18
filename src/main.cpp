@@ -1,14 +1,17 @@
-﻿#include <Arduino.h>
+﻿/// Sailbot 2025, this time around programming wins the competition
+/// Team:
+///     Lead Programmer: Christoper Rohland (Discord: Computery, GitHub: C0mputery)
+
+#include <Arduino.h>
 #include <Logging/Logger.h>
 
 using namespace Logging;
 
+/// Arduino setup function, is called once when the program starts
 void setup() {
     Logger::Begin(&Serial, 115200);
 }
 
-// the loop function runs over and over again forever
+/// Arduino loop function, is called repeatedly
 void loop() {
-    Logger::Println(F("Hello, world!"));
-    delay(1000);
 }
