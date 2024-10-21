@@ -11,7 +11,6 @@ namespace Electronics::Types {
     class GpsBase : public Electronics {
     public:
         virtual ~GpsBase() = default;
-        virtual void Init() = 0;
         virtual GpsFix Update() = 0;
         virtual GpsFix GetFix() = 0;
         virtual double GetLatitude() = 0;

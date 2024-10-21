@@ -41,7 +41,7 @@ using namespace Electronics::Types;
 
 class CLASSNAMEHERE : GpsBase {
 public:
-    void Init() override {
+    void Init() {
         // Add any initialization code here
     }
 
