@@ -10,10 +10,15 @@
 #include <Wire.h>
 #include <SPI.h>
 
+#include "Electronics/Implementations/GPS/UBloxGPSIC2.h"
+
 using namespace Logging;
+
+UBloxGPSI2C gps;
 
 void setup() {
     Logger::Begin(&Serial, 115200);
+    gps.Init();
     Logger::Log(F("Hello, World!"));
 }
 

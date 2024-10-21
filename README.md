@@ -29,7 +29,7 @@ The project is structured as follows:
 - `lib/`: The libraries for the project.
 - `test/`: The tests for the project.
 - `platformio.ini`: The configuration file for the project.
-- 
+
 # Compiling and Running the Project
 
 ![Image](Resources/SoTrue.jpeg "So True")

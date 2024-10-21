@@ -2,9 +2,13 @@
 
 #ifndef BOAT_ELECTRONICS_H
 #define BOAT_ELECTRONICS_H
+#include <Arduino.h>
+
 
 namespace Electronics {
     class BoatElectronics {
+    public:
+
     };
 }
 
