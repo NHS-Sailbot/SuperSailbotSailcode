@@ -1,4 +1,6 @@
-﻿import os
+﻿# If one of you python wizards can make this better, please do so! I could not get exit() to work without killing the build process.
+
+import os
 
 stringToRemove = """template<typename _Rep, typename _Period>
       constexpr
@@ -10,16 +12,26 @@ stringToRemove = """template<typename _Rep, typename _Period>
 	return -__d;
       }"""
 
-file_path = os.path.join(os.path.expanduser("~"), ".platformio", "packages", "toolchain-gccarmnoneeabi", "arm-none-eabi", "include", "c++", "7.2.1", "chrono")
+Import("env")
+file_path = os.path.join(env.PioPlatform().get_package_dir("toolchain-gccarmnoneeabi"), "arm-none-eabi", "include", "c++", "7.2.1", "chrono")
+patchIndicator = file_path + ".patched"
+
+if os.path.exists(patchIndicator):
+    print("Chrono has already been fixed!")
 
 if not os.path.exists(file_path):
-    print("File not found")
-    exit()
+    print("Chrono file not found! Is gcc-arm-none-eabi even installed?")
 
-with open(file_path, "r") as file:
-    content = file.read()
+if os.path.exists(file_path) and not os.path.exists(patchIndicator):
+    with open(file_path, "r") as file:
+        content = file.read()
 
-content = content.replace(stringToRemove, "")
+    content = content.replace(stringToRemove, "")
 
-with open(file_path, "w") as file:
-    file.write(content)
+    with open(file_path, "w") as file:
+        file.write(content)
+
+    with open(patchIndicator, "w") as file:
+        file.write("")
+
+    print("Chrono has been fixed!")
