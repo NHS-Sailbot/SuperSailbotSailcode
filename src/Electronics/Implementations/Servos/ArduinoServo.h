@@ -2,9 +2,9 @@
 
 #pragma once
 
-#include "../../Types/ServoBase.h"
 #include <Servo.h>
 #include <Arduino.h>
+#include "Electronics/Types/ServoBase.h"
 
 namespace Electronics::Implementations::Servos {
     class ArduinoServo final : Types::ServoBase {
