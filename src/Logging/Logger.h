@@ -1,28 +1,31 @@
 ﻿/// Created by Computery on 9/19/2024.
 
-#ifndef LOGGER_H
-#define LOGGER_H
+#pragma once
 
 #include <Arduino.h>
 
 namespace Logging {
     class Logger {
     public:
-        /// Begin logging
-        static void Begin(HardwareSerial *serial, unsigned long baudRate);
-
-        /// Log a message
-        static void Log(const char *message, bool newLine = true);
-
-        /// Log a message
-        static void Log(const __FlashStringHelper *message, bool newLine = true);
-
+         static void Start(HardwareSerial *serial, const unsigned long baudRate) {
+            LoggingSerial = serial;
+            LoggingSerial->begin(baudRate);
+            HasBegun = true;
+        }
+        /// Log a message to all active log outputs
+        static void Log(const char *message, const bool newLine = true) {
+            if (!HasBegun) { return; }
+            LoggingSerial->print(message);
+            if (newLine) { LoggingSerial->println(); }
+        }
+        /// Log a message to all active log outputs
+        static void Log(const __FlashStringHelper *message, const bool newLine = true) {
+            Log(reinterpret_cast<const char *>(message), newLine);
+        }
     private:
         /// Is used to check if the logger has been started
-        static bool HasBegun;
+        inline static bool HasBegun = false;
         /// The serial port to log to
-        static HardwareSerial *LoggingSerial;
+        inline static HardwareSerial *LoggingSerial = nullptr;
     };
 }
-
-#endif

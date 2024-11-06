@@ -1,7 +1,6 @@
 ﻿/// Created by Computery on 9/19/2024.
 
-#ifndef SERVO_H
-#define SERVO_H
+#pragma once
 
 namespace Electronics::Types {
     class ServoBase {
@@ -15,5 +14,3 @@ namespace Electronics::Types {
         virtual void SetAngle(int angle) = 0;
     };
 }
-
-#endif

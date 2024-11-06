@@ -6,20 +6,13 @@
 #include <Arduino.h>
 #include <Logging/Logger.h>
 
-// The Ublox Library breaks if the following includes are not included
-#include <Wire.h>
-#include <SPI.h>
-
-#include "Electronics/Implementations/GPS/UBloxGPSIC2.h"
+#include "Electronics/BoatElectronics.h"
 
 using namespace Logging;
 
-UBloxGPSI2C gps;
-
 void setup() {
-    Logger::Begin(&Serial, 115200);
-    gps.Init();
-    Logger::Log(F("Hello, World!"));
+    Logger::Start(&Serial, 115200);
+    Electronics::BoatElectronics::Start();
 }
 
 void loop() {

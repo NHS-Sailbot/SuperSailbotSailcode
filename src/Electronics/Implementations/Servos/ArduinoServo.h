@@ -1,7 +1,6 @@
 ﻿/// Created by Computery on 9/19/2024.
 
-#ifndef ARDUINO_SERVO_H
-#define ARDUINO_SERVO_H
+#pragma once
 
 #include "../../Types/ServoBase.h"
 #include <Servo.h>
@@ -27,5 +26,3 @@ namespace Electronics::Implementations::Servos {
         int m_RotationRange = 180;
     };
 }
-
-#endif

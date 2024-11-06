@@ -1,8 +1,8 @@
-﻿#ifndef GPSBASE_H
-#define GPSBASE_H
+﻿#pragma once
 
 namespace Electronics::Types {
     enum GpsFix {
+        DeadReckoning,
         NoFix,
         Fix,
     };
@@ -27,6 +27,3 @@ namespace Electronics::Types {
         virtual double GetSpeed() = 0;
     };
 }
-
-
-#endif
