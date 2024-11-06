@@ -21,6 +21,6 @@ namespace Electronics::Types {
         double m_Latitude = 0;
         double m_Longitude = 0;
         double m_Heading = 0;
-        SFE_UBLOX_GNSS UbloxGnss;
+        SFE_UBLOX_GNSS m_UbloxGnss;
     };
 }

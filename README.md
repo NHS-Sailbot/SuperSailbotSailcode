@@ -3,13 +3,12 @@
 ![Image](Resources/Sailbot.png "Sailbot")
 
 # About the Project
-This project is the software that does the sailcode for the Sailbot sailboat. 
-[Discord](https://discord.gg/UttQ8HDzf3)
+This project is the software that does the sailcode for the Sailbot sailboat.
+- [Discord](https://discord.gg/UttQ8HDzf3)
 # Project Setup
 ## Setup PlatformIO (Necessary, for all IDEs)
 1. Install Python
 2. Install the [PlatformIO Core](https://docs.platformio.org/en/latest/core/installation/methods/installer-script.html)
-3. Run the [PlatformIO Fixer Script](SuperScripts/PlatformIOFixer.py)
 
 ## Setup the Project In Your IDE
 ### CLion (Recommended, it's free with your student email)
@@ -33,3 +32,4 @@ The project is structured as follows:
 # Compiling and Running the Project
 
 ![Image](Resources/SoTrue.jpeg "So True")
+idfk figure it out

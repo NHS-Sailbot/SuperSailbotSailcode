@@ -6,11 +6,10 @@
 namespace Electronics::Implementations::Gps {
     UbloxGpsSerial::UbloxGpsSerial(HardwareSerial* serialPort = &Serial1) {
         Logging::Logger::Log(F("Init GPS..."));
-        if (UbloxGnss.begin(*serialPort) == false) //Connect to the u-blox module using Wire port
+        if (m_UbloxGnss.begin(*serialPort) == false) //Connect to the u-blox module using Wire port
         {
-            Logging::Logger::Log(F("u-blox GNSS not detected at default I2C address. Please check wiring. Freezing."));
+            Logging::Logger::Log(F("u-blox GNSS not detected at default I2C address. Please check wiring.."));
         }
-        UbloxGnss.setI2COutput(COM_TYPE_UBX); //Set the I2C port to output UBX only (turn off NMEA noise)
-        UbloxGnss.saveConfigSelective(VAL_CFG_SUBSEC_IOPORT); //Save (only) the communications port settings to flash and BBR
+        m_UbloxGnss.saveConfigSelective(VAL_CFG_SUBSEC_IOPORT); //Save (only) the communications port settings to flash and BBR
     }
 }

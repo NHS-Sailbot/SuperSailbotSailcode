@@ -7,9 +7,11 @@
 namespace Logging {
     class Logger {
     public:
-         static void Start(HardwareSerial *serial, const unsigned long baudRate) {
+        static void Start(HardwareSerial *serial, const unsigned long baudRate) {
             LoggingSerial = serial;
             LoggingSerial->begin(baudRate);
+            delay(2500); // This is here so we can see the start of the program in the serial monitor
+            Logger::Log(F("Logger started!"));
             HasBegun = true;
         }
         /// Log a message to all active log outputs

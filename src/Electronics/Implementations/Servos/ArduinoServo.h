@@ -7,7 +7,7 @@
 #include "Electronics/Types/ServoBase.h"
 
 namespace Electronics::Implementations::Servos {
-    class ArduinoServo final : Types::ServoBase {
+    class ArduinoServo final : public Types::ServoBase {
     public:
         explicit ArduinoServo(const uint8_t pin, const int rotationRange = 180) {
             m_Servo.attach(pin);

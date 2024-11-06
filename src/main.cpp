@@ -9,11 +9,14 @@
 #include "Electronics/BoatElectronics.h"
 
 using namespace Logging;
+using namespace Electronics;
 
 void setup() {
     Logger::Start(&Serial, 115200);
-    Electronics::BoatElectronics::Start();
+    BoatElectronics::Start();
+    Logger::Log(F("Boat electronics started!"));
 }
 
 void loop() {
+    BoatElectronics::Update();
 }
