@@ -1,0 +1,9 @@
+﻿{
+    "target_overrides": {
+        "*": {
+            "platform.crash-capture-enabled": true,
+            "platform.fatal-error-auto-reboot-enabled": true,
+            "platform.error-reboot-max": 10
+        }
+    }
+}

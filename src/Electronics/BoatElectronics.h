@@ -61,18 +61,14 @@ namespace Electronics {
 
             WinchServo = new Implementations::Servos::ArduinoServo(9, 180);
             MinLimitSwitchWinch = new InterruptLimitSwitchMethod(2, []() {
-                Logger::Log(F("Winch min limit switch hit."));
             });
             MaxLimitSwitchWinch = new InterruptLimitSwitchMethod(3, []() {
-                Logger::Log(F("Winch max limit switch hit."));
             });
 
             JibWinchServo = new Implementations::Servos::ArduinoServo(11, 180);
             MinLimitSwitchJibWinch = new InterruptLimitSwitchMethod(4, []() {
-                Logger::Log(F("Jib winch min limit switch hit."));
             });
             MaxLimitSwitchJibWinch = new InterruptLimitSwitchMethod(5, []() {
-                Logger::Log(F("Jib winch max limit switch hit."));
             });
 
             RudderServo = new Implementations::Servos::ArduinoServo(10, 180);
