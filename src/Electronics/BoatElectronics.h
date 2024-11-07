@@ -2,10 +2,12 @@
 
 #pragma once
 
-#include "Implementations/GPS/UBlox/UbloxGpsI2c.h"
+#include "Implementations/GPS/UbloxGpsI2c.h"
 #include "Types/Gps/GpsBase.h"
 #include "Logging/Logger.h"
 #include <Wire.h>
+
+#include "Implementations/LimitSwitches/InterruptLimitSwitchMethod.h"
 #include "Implementations/Magnetometer/SparkFunICM20948.h"
 #include "Implementations/Servos/ArduinoServo.h"
 #include "Implementations/WindSensors/AnalogWindSensorWithMagnetometerCorrection.h"
@@ -20,8 +22,15 @@ namespace Electronics {
     class BoatElectronics {
     public:
         inline static ServoBase *WinchServo = nullptr;
+        inline static InterruptLimitSwitchMethod *MinLimitSwitchWinch = nullptr;
+        inline static InterruptLimitSwitchMethod *MaxLimitSwitchWinch = nullptr;
+
+        inline static ServoBase *JibWinchServo = nullptr;
+        inline static InterruptLimitSwitchMethod *MinLimitSwitchJibWinch = nullptr;
+        inline static InterruptLimitSwitchMethod *MaxLimitSwitchJibWinch = nullptr;
+
         inline static ServoBase *RudderServo = nullptr;
-        inline static ServoBase *JibServo = nullptr;
+
         inline static GpsBase *Gps = nullptr;
 
         inline static MagnetometerBase *Magnetometer = nullptr;
@@ -51,7 +60,21 @@ namespace Electronics {
             Wire.setClock(400000);
 
             WinchServo = new Implementations::Servos::ArduinoServo(9, 180);
-            JibServo = new Implementations::Servos::ArduinoServo(11, 180);
+            MinLimitSwitchWinch = new InterruptLimitSwitchMethod(2, []() {
+                Logger::Log(F("Winch min limit switch hit."));
+            });
+            MaxLimitSwitchWinch = new InterruptLimitSwitchMethod(3, []() {
+                Logger::Log(F("Winch max limit switch hit."));
+            });
+
+            JibWinchServo = new Implementations::Servos::ArduinoServo(11, 180);
+            MinLimitSwitchJibWinch = new InterruptLimitSwitchMethod(4, []() {
+                Logger::Log(F("Jib winch min limit switch hit."));
+            });
+            MaxLimitSwitchJibWinch = new InterruptLimitSwitchMethod(5, []() {
+                Logger::Log(F("Jib winch max limit switch hit."));
+            });
+
             RudderServo = new Implementations::Servos::ArduinoServo(10, 180);
             Gps = new Implementations::Gps::UbloxGpsI2c(&Wire, 66);
             Magnetometer = new Implementations::Magnetometers::SparkFunICM20948(&Wire, 68, tiltCompensatedCompassSettings);

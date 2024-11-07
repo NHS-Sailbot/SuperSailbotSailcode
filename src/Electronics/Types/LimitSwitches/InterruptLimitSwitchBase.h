@@ -3,7 +3,6 @@
 #pragma once
 
 #include <Arduino.h>
-#include "Logging/Logger.h"
 
 namespace Electronics::Types {
     class InterruptLimitSwitchBase {
@@ -11,6 +10,7 @@ namespace Electronics::Types {
         virtual ~InterruptLimitSwitchBase() = default;
 
         inline static std::vector<InterruptLimitSwitchBase*> LimitSwitches = {};
+
         explicit InterruptLimitSwitchBase(uint8_t limitPin) {
             LimitSwitches.push_back(this);
             m_LimitPin = limitPin;
