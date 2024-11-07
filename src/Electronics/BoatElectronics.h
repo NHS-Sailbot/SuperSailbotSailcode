@@ -61,6 +61,7 @@ namespace Electronics {
         static void Update() {
             Gps->Update();
             Magnetometer->Update();
+            WindSensor->Update();
         }
     };
 }
