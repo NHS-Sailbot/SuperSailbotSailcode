@@ -16,16 +16,16 @@ namespace Electronics::Types {
     };
 
     class MagnetometerBase {
-        public:
-            virtual ~MagnetometerBase() = default;
+    public:
+        virtual ~MagnetometerBase() = default;
 
-            /// Returns the heading of the boat in degrees, 0 is north, 90 is east, 180 is south, 270 is west
-            virtual double GetHeading() = 0;
+        /// Returns the current heading of the magnetometer. Measured in degrees from 0 to 360. 0 is north, 90 is east, 180 is south, 270 is west.
+        virtual double GetHeading() = 0;
 
-            /// Returns the calibration status of the magnetometer
-            virtual MagnetometerCalibration GetCalibration() = 0;
+        /// Updates the magnetometer's data.
+        virtual void Update() = 0;
 
-            /// Updates the calibration of the magnetometer
-            virtual MagnetometerCalibration Update() = 0;
+        /// Returns the calibration status of the magnetometer.
+        virtual MagnetometerCalibration GetCalibration() = 0;
     };
 }

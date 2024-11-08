@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "Electronics/Types/Gps/UbloxGpsBase.h"
+#include "UbloxGpsBase.h"
 
 namespace Electronics::Implementations::Gps {
     class UbloxGpsI2c final : public Types::UbloxGpsBase {

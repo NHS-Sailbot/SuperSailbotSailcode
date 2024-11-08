@@ -1,10 +1,10 @@
 ﻿/// Created by Computery on 11/6/2024.
 
 #pragma once
-#include "Electronics/Types/WindSensorBase.h"
-#include <Arduino.h>
 
+#include <Arduino.h>
 #include "Electronics/Types/Magnetometer/MagnetometerBase.h"
+#include "Electronics/Types/WindSensor/WindSensorBase.h"
 
 namespace Electronics::Implementations::WindSensors {
     class AnalogWindSensorWithMagnetometerCorrection : public Types::WindSensorBase {

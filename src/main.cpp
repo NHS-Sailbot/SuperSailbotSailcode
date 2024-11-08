@@ -2,24 +2,22 @@
 /// Sailbot 2025, this time around programming wins the competition
 /// Team:
 ///     Lead Programmer: Christoper Rohland (Discord: Computery, GitHub: C0mputery)
-///     YALL NEED TO ADD YOUR NAMES
-
-
 
 #include <Arduino.h>
 #include <Logging/Logger.h>
 
-#include "Electronics/BoatElectronics.h"
+#include "Electronics/ElectronicHandler.h"
+#include "FileSystem/FileSystem.h"
 
 using namespace Logging;
 using namespace Electronics;
 
 void setup() {
-    Logger::Start(&Serial, 115200);
-    BoatElectronics::Start();
+    Logger::Start();
+    ElectronicHandler::Start();
     Logger::Log(F("Boat electronics started!"));
 }
 
 void loop() {
-    BoatElectronics::Update();
+    ElectronicHandler::Update();
 }

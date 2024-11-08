@@ -2,12 +2,11 @@
 
 #pragma once
 
-#include "Electronics/Types/Gps/UbloxGpsBase.h"
-#include <HardwareSerial.h>
+#include "UbloxGpsBase.h"
 
 namespace Electronics::Implementations::Gps {
     class UbloxGpsSerial final : public Types::UbloxGpsBase {
     public:
-        explicit UbloxGpsSerial(arduino::HardwareSerial* serialPort);
+        explicit UbloxGpsSerial(HardwareSerial* serialPort);
     };
 }

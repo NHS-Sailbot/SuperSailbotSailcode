@@ -11,8 +11,8 @@ namespace Electronics::Types {
     public:
         virtual ~GpsBase() = default;
 
-        /// Gets called once per updated, makes the GPS update its cached data.
-        virtual GpsFix Update() = 0;
+        /// Gets and caches the latest GPS data.
+        virtual void Update() = 0;
         /// Returns the cached fix status of the GPS.
         virtual GpsFix GetFix() = 0;
         /// Returns the cached latitude of the GPS.

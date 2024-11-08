@@ -10,7 +10,7 @@ namespace Electronics::Implementations::Magnetometers {
     public:
         SparkFunICM20948(MbedI2C *i2cWire, uint8_t address, Types::TiltCompensatedCompassSettings settings);
 
-        Types::MagnetometerCalibration Update() override;
+        void Update() override;
 
         Types::MagnetometerCalibration GetCalibration() override;
 

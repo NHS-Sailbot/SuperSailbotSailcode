@@ -1,6 +1,7 @@
 ﻿/// Created by Computery on 11/6/2024.
 
 #include "AnalogWindSensorWithMagnetometerCorrection.h"
+
 namespace Electronics::Implementations::WindSensors {
     AnalogWindSensorWithMagnetometerCorrection::AnalogWindSensorWithMagnetometerCorrection(uint8_t windSensorPin, Types::MagnetometerBase *magnetometer) {
         m_WindSensorPin = windSensorPin;

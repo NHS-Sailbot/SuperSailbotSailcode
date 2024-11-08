@@ -2,20 +2,14 @@
 
 #pragma once
 
-#include "Electronics/Types/LimitSwitches/InterruptLimitSwitchBase.h"
-#include "Logging/Logger.h"
+#include "Electronics/Types/LimitSwitch/LimitSwitchBase.h"
 
-namespace Electronics::Types {
-    class InterruptLimitSwitchMethod final : public InterruptLimitSwitchBase {
+namespace Electronics::Implementations {
+    class InterruptLimitSwitchMethod final : public Types::LimitSwitchBase {
     public:
-        explicit InterruptLimitSwitchMethod(uint8_t limitPin, const std::function<void()> &callback) : InterruptLimitSwitchBase(limitPin) {
-            m_Callback = callback;
-        }
+        explicit InterruptLimitSwitchMethod(uint8_t limitPin, const std::function<void()> &callback);
 
-        void LimitHit() override {
-            if (m_Callback) { m_Callback(); }
-            else { Logging::Logger::Log(F("InterruptLimitSwitchMethod callback is null??")); }
-        }
+        void LimitHit() override;
 
     private:
         std::function<void()> m_Callback;

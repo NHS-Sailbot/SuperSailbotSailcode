@@ -25,7 +25,7 @@ Magnetometers::SparkFunICM20948::SparkFunICM20948(MbedI2C *i2cWire, uint8_t addr
     }
 }
 
-MagnetometerCalibration Magnetometers::SparkFunICM20948::Update() {
+void Magnetometers::SparkFunICM20948::Update() {
     if (m_SparkFunICM20948.dataReady()) { m_SparkFunICM20948.getAGMT(); }
 
     if (m_SparkFunICM20948.status != ICM_20948_Stat_Ok) {
@@ -36,7 +36,7 @@ MagnetometerCalibration Magnetometers::SparkFunICM20948::Update() {
             NotCalibrated,
             NotCalibrated
         };
-        return m_Calibration;
+        return;
     }
 
     m_Calibration = {
@@ -55,7 +55,7 @@ MagnetometerCalibration Magnetometers::SparkFunICM20948::Update() {
 
     m_Heading = calculateHeading(acc, mag);
 
-    return m_Calibration;
+    return;
 }
 
 MagnetometerCalibration Magnetometers::SparkFunICM20948::
