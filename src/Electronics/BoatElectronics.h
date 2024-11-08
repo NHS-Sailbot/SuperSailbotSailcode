@@ -60,15 +60,15 @@ namespace Electronics {
             Wire.setClock(400000);
 
             WinchServo = new Implementations::Servos::ArduinoServo(9, 180);
-            MinLimitSwitchWinch = new InterruptLimitSwitchMethod(2, []() {
+            MinLimitSwitchWinch = new InterruptLimitSwitchMethod(2, [] {
             });
-            MaxLimitSwitchWinch = new InterruptLimitSwitchMethod(3, []() {
+            MaxLimitSwitchWinch = new InterruptLimitSwitchMethod(3, [] {
             });
 
             JibWinchServo = new Implementations::Servos::ArduinoServo(11, 180);
-            MinLimitSwitchJibWinch = new InterruptLimitSwitchMethod(4, []() {
+            MinLimitSwitchJibWinch = new InterruptLimitSwitchMethod(4, [] {
             });
-            MaxLimitSwitchJibWinch = new InterruptLimitSwitchMethod(5, []() {
+            MaxLimitSwitchJibWinch = new InterruptLimitSwitchMethod(5, [] {
             });
 
             RudderServo = new Implementations::Servos::ArduinoServo(10, 180);

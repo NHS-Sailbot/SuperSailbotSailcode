@@ -7,7 +7,9 @@
 namespace Electronics::Types {
     class InterruptLimitSwitchBase {
     public:
-        virtual ~InterruptLimitSwitchBase() = default;
+        virtual ~InterruptLimitSwitchBase() {
+            LimitSwitches.erase(std::remove(LimitSwitches.begin(), LimitSwitches.end(), this), LimitSwitches.end());
+        }
 
         inline static std::vector<InterruptLimitSwitchBase*> LimitSwitches = {};
 
@@ -19,7 +21,7 @@ namespace Electronics::Types {
         }
 
         static void staticLimitHit() {
-            for (auto limitSwitch : LimitSwitches) {
+            for (InterruptLimitSwitchBase *limitSwitch: LimitSwitches) {
                 if (digitalRead(limitSwitch->m_LimitPin) == LOW) {
                     limitSwitch->LimitHit();
                 }
