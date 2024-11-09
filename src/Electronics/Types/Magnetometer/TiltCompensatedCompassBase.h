@@ -44,6 +44,7 @@ namespace Electronics::Types {
     public:
         explicit TiltCompensatedCompassBase(TiltCompensatedCompassSettings &settings);
 
+        /// Returns the current heading of the magnetometer. Measured in degrees from 0 to 360. 0 is north, 90 is east, 180 is south, 270 is west.
         double GetHeading() override;
 
     protected:

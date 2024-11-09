@@ -36,28 +36,21 @@ namespace Electronics::Types {
         return heading;
     }
 
-    void TiltCompensatedCompassBase::scale_IMU(float accelerometerVector[3],
-                                                                   float magnetometerVector[3]) {
+    void TiltCompensatedCompassBase::scale_IMU(float accelerometerVector[3], float magnetometerVector[3]) {
         float temp[3];
         //apply offsets (bias) and scale factors from Magneto
         for (uint8_t i = 0; i < 3; i++) { temp[i] = (accelerometerVector[i] - m_Settings.A_B[i]); }
 
-        accelerometerVector[0] = m_Settings.A_Ainv[0][0] * temp[0] + m_Settings.A_Ainv[0][1] * temp[1] + m_Settings.
-                                 A_Ainv[0][2] * temp[2];
-        accelerometerVector[1] = m_Settings.A_Ainv[1][0] * temp[0] + m_Settings.A_Ainv[1][1] * temp[1] + m_Settings.
-                                 A_Ainv[1][2] * temp[2];
-        accelerometerVector[2] = m_Settings.A_Ainv[2][0] * temp[0] + m_Settings.A_Ainv[2][1] * temp[1] + m_Settings.
-                                 A_Ainv[2][2] * temp[2];
+        accelerometerVector[0] = m_Settings.A_Ainv[0][0] * temp[0] + m_Settings.A_Ainv[0][1] * temp[1] + m_Settings.A_Ainv[0][2] * temp[2];
+        accelerometerVector[1] = m_Settings.A_Ainv[1][0] * temp[0] + m_Settings.A_Ainv[1][1] * temp[1] + m_Settings.A_Ainv[1][2] * temp[2];
+        accelerometerVector[2] = m_Settings.A_Ainv[2][0] * temp[0] + m_Settings.A_Ainv[2][1] * temp[1] + m_Settings.A_Ainv[2][2] * temp[2];
         vector_normalize(accelerometerVector);
 
         //apply offsets (bias) and scale factors from Magneto
         for (uint8_t i = 0; i < 3; i++) { temp[i] = (magnetometerVector[i] - m_Settings.M_B[i]); }
-        magnetometerVector[0] = m_Settings.M_Ainv[0][0] * temp[0] + m_Settings.M_Ainv[0][1] * temp[1] + m_Settings.
-                                M_Ainv[0][2] * temp[2];
-        magnetometerVector[1] = m_Settings.M_Ainv[1][0] * temp[0] + m_Settings.M_Ainv[1][1] * temp[1] + m_Settings.
-                                M_Ainv[1][2] * temp[2];
-        magnetometerVector[2] = m_Settings.M_Ainv[2][0] * temp[0] + m_Settings.M_Ainv[2][1] * temp[1] + m_Settings.
-                                M_Ainv[2][2] * temp[2];
+        magnetometerVector[0] = m_Settings.M_Ainv[0][0] * temp[0] + m_Settings.M_Ainv[0][1] * temp[1] + m_Settings.M_Ainv[0][2] * temp[2];
+        magnetometerVector[1] = m_Settings.M_Ainv[1][0] * temp[0] + m_Settings.M_Ainv[1][1] * temp[1] + m_Settings.M_Ainv[1][2] * temp[2];
+        magnetometerVector[2] = m_Settings.M_Ainv[2][0] * temp[0] + m_Settings.M_Ainv[2][1] * temp[1] + m_Settings.M_Ainv[2][2] * temp[2];
 
         vector_normalize(magnetometerVector);
     }

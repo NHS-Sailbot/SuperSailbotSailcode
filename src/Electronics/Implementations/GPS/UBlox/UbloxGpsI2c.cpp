@@ -3,14 +3,19 @@
 #include "UbloxGpsI2c.h"
 #include "Logging/Logger.h"
 
+using namespace Logging;
+
 namespace Electronics::Implementations::Gps {
     UbloxGpsI2c::UbloxGpsI2c(MbedI2C* i2cWire = &Wire, uint8_t address = 66) {
-        Logging::Logger::Log(F("Init GPS..."));
-        if (m_UbloxGnss.begin(*i2cWire, address) == false) //Connect to the u-blox module using Wire port
-        {
-            Logging::Logger::Log(F("u-blox GNSS not detected at default I2C address. Please check wiring. Freezing."));
+        Logger::Log(F("Initializing Ublox GPS on I2C..."));
+
+        if (m_UbloxGnss.begin(*i2cWire, address) == false) {
+            Logger::Log(F("Ublox GPS not detected. Please check wiring."));
+            return;
         }
-        m_UbloxGnss.setI2COutput(COM_TYPE_UBX); //Set the I2C port to output UBX only (turn off NMEA noise)
-        m_UbloxGnss.saveConfigSelective(VAL_CFG_SUBSEC_IOPORT); //Save (only) the communications port settings to flash and BBR
+        m_UbloxGnss.setI2COutput(COM_TYPE_UBX);
+        m_UbloxGnss.saveConfigSelective(VAL_CFG_SUBSEC_IOPORT);
+
+        Logger::Log(F("Ublox GPS initialized!"));
     }
 }

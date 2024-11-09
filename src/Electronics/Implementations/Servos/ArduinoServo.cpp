@@ -3,16 +3,22 @@
 #include "ArduinoServo.h"
 #include <Arduino.h>
 
-Electronics::Implementations::Servos::ArduinoServo::ArduinoServo(const uint8_t pin, const int rotationRange) {
-    m_Servo.attach(pin);
-    m_RotationRange = rotationRange;
-}
+#include "Logging/Logger.h"
 
-int Electronics::Implementations::Servos::ArduinoServo::GetAngle() {
-    return m_Angle;
-}
+namespace Electronics::Implementations {
+    Servos::ArduinoServo::ArduinoServo(const uint8_t pin, const int rotationRange) {
+        Logging::Logger::Log(F("Initializing Arduino servo..."));
+        m_Servo.attach(pin);
+        m_RotationRange = rotationRange;
+        Logging::Logger::Log(F("Arduino servo initialized!"));
+    }
 
-void Electronics::Implementations::Servos::ArduinoServo::SetAngle(int angle) {
-    angle = map(angle, 0, 180, 0, m_RotationRange);
-    m_Angle = angle;
+    int Servos::ArduinoServo::GetAngle() {
+        return m_Angle;
+    }
+
+    void Servos::ArduinoServo::SetAngle(int angle) {
+        angle = map(angle, 0, 180, 0, m_RotationRange);
+        m_Angle = angle;
+    }
 }

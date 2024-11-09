@@ -7,7 +7,6 @@ using namespace Logging;
 using namespace Electronics::Types;
 
 void UbloxGpsBase::Update() {
-    Logger::Log(F("Updating GPS..."));
 
     // 0=no fix, 1=dead reckoning, 2=2D, 3=3D, 4=GNSS, 5=Time fix
     const uint8_t fixType = m_UbloxGnss.getFixType();

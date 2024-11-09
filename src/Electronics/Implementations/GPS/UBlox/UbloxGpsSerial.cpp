@@ -3,13 +3,18 @@
 #include "UbloxGpsSerial.h"
 #include "Logging/Logger.h"
 
+using namespace Logging;
+
 namespace Electronics::Implementations::Gps {
     UbloxGpsSerial::UbloxGpsSerial(HardwareSerial* serialPort = &Serial1) {
-        Logging::Logger::Log(F("Init GPS..."));
-        if (m_UbloxGnss.begin(*serialPort) == false) //Connect to the u-blox module using Wire port
-        {
-            Logging::Logger::Log(F("u-blox GNSS not detected at default I2C address. Please check wiring.."));
+        Logger::Log(F("Initializing Ublox GPS on Serial..."));
+
+        if (m_UbloxGnss.begin(*serialPort) == false){
+            Logger::Log(F("Ublox GPS not detected. Please check wiring."));
+            return;
         }
-        m_UbloxGnss.saveConfigSelective(VAL_CFG_SUBSEC_IOPORT); //Save (only) the communications port settings to flash and BBR
+        m_UbloxGnss.saveConfigSelective(VAL_CFG_SUBSEC_IOPORT);
+
+        Logger::Log(F("Ublox GPS initialized!"));
     }
 }

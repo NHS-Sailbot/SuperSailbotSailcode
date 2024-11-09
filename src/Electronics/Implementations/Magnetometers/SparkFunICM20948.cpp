@@ -5,24 +5,30 @@
 
 using namespace Electronics::Implementations;
 using namespace Electronics::Types;
+using namespace Logging;
 
 Magnetometers::SparkFunICM20948::SparkFunICM20948(MbedI2C *i2cWire, uint8_t address, TiltCompensatedCompassSettings settings) : TiltCompensatedCompassBase(settings) {
+    Logger::Log(F("Initializing SparkFun ICM-20948 magnetometer..."));
+
     if (m_SparkFunICM20948.begin(*i2cWire, address) != ICM_20948_Stat_Ok) {
-        Logging::Logger::Log(F("ICM_20948 not detected at I2C address. Please check wiring."));
+        Logger::Log(F("ICM_20948 not detected at I2C address. Please check wiring."));
         m_Calibration = {
             NotCalibrated,
             NotCalibrated,
             NotCalibrated,
             NotCalibrated
         };
-    } else {
-        m_Calibration = {
-            Calibrated,
-            Calibrated,
-            Calibrated,
-            Calibrated
-        };
+        return;
     }
+
+    m_Calibration = {
+        Calibrated,
+        Calibrated,
+        Calibrated,
+        Calibrated
+    };
+
+    Logger::Log(F("SparkFun ICM-20948 magnetometer initialized!"));
 }
 
 void Magnetometers::SparkFunICM20948::Update() {

@@ -3,12 +3,21 @@
 #include "InterruptLimitSwitchMethod.h"
 #include "Logging/Logger.h"
 
-Electronics::Implementations::InterruptLimitSwitchMethod::InterruptLimitSwitchMethod(uint8_t limitPin,
-    const std::function<void()> &callback): LimitSwitchBase(limitPin) {
-    m_Callback = callback;
-}
+using namespace Logging;
 
-void Electronics::Implementations::InterruptLimitSwitchMethod::LimitHit() {
-    if (m_Callback) { m_Callback(); }
-    else { Logging::Logger::Log(F("InterruptLimitSwitchMethod callback is null??")); }
+namespace Electronics::Implementations {
+    InterruptLimitSwitchMethod::InterruptLimitSwitchMethod(uint8_t limitPin, const std::function<void()> &callback): LimitSwitchBase(limitPin) {
+        Logger::Log(F("Creating InterruptLimitSwitchMethod..."));
+        m_Callback = callback;
+        if (!m_Callback) {
+            Logger::Log(F("Attempted to create InterruptLimitSwitchMethod with null callback, this is not allowed!"));
+            return;
+        }
+        Logger::Log(F("Interrupt Limit Switch with method created!"));
+    }
+
+    void InterruptLimitSwitchMethod::LimitHit() {
+        if (m_Callback) { m_Callback(); }
+        else { Logger::Log(F("InterruptLimitSwitchMethod callback is null??")); }
+    }
 }

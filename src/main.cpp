@@ -6,18 +6,20 @@
 #include <Arduino.h>
 #include <Logging/Logger.h>
 
-#include "Electronics/ElectronicHandler.h"
-#include "FileSystem/FileSystem.h"
+#include "Electronics/ElectronicsManager.h"
+#include "Sailing/Autopilot/AutopilotManager.h"
 
 using namespace Logging;
 using namespace Electronics;
+using namespace Autopilot;
 
 void setup() {
     Logger::Start();
-    ElectronicHandler::Start();
-    Logger::Log(F("Boat electronics started!"));
+    ElectronicsManager::Start();
+    Autopilot::AutopilotManager::Start();
 }
 
 void loop() {
-    ElectronicHandler::Update();
+    ElectronicsManager::Update();
+    Autopilot::AutopilotManager::Update();
 }
