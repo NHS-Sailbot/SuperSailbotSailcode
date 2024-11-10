@@ -12,18 +12,13 @@ namespace Electronics::Implementations::Magnetometers {
 
         void Update() override;
 
-        Types::MagnetometerCalibration GetCalibration() override;
+        Types::MagnetometerCalibrationStatus GetCalibration() override;
 
     private:
         ICM_20948_I2C m_SparkFunICM20948;
 
         float acc[3] = {0, 0, 0};
         float mag[3] = {0, 0, 0};
-        Types::MagnetometerCalibration m_Calibration = {
-            Types::MagnetometerCalibrationStatus::NotCalibrated,
-            Types::MagnetometerCalibrationStatus::NotCalibrated,
-            Types::MagnetometerCalibrationStatus::NotCalibrated,
-            Types::MagnetometerCalibrationStatus::NotCalibrated
-        };
+        Types::MagnetometerCalibrationStatus m_Calibration = Types::MagnetometerCalibrationStatus::NotCalibrated;
     };
 }

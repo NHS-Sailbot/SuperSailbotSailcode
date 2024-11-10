@@ -12,21 +12,11 @@ Magnetometers::SparkFunICM20948::SparkFunICM20948(MbedI2C *i2cWire, uint8_t addr
 
     if (m_SparkFunICM20948.begin(*i2cWire, address) != ICM_20948_Stat_Ok) {
         Logger::Log(F("ICM_20948 not detected at I2C address. Please check wiring."));
-        m_Calibration = {
-            NotCalibrated,
-            NotCalibrated,
-            NotCalibrated,
-            NotCalibrated
-        };
+        m_Calibration = NotCalibrated;
         return;
     }
 
-    m_Calibration = {
-        Calibrated,
-        Calibrated,
-        Calibrated,
-        Calibrated
-    };
+    m_Calibration = Calibrated;
 
     Logger::Log(F("SparkFun ICM-20948 magnetometer initialized!"));
 }
@@ -35,22 +25,12 @@ void Magnetometers::SparkFunICM20948::Update() {
     if (m_SparkFunICM20948.dataReady()) { m_SparkFunICM20948.getAGMT(); }
 
     if (m_SparkFunICM20948.status != ICM_20948_Stat_Ok) {
-        Logging::Logger::Log(F("Error reading magnetometer"));
-        m_Calibration = {
-            NotCalibrated,
-            NotCalibrated,
-            NotCalibrated,
-            NotCalibrated
-        };
+        Logger::Log(F("Error reading magnetometer"));
+        m_Calibration = NotCalibrated;
         return;
     }
 
-    m_Calibration = {
-        Calibrated,
-        Calibrated,
-        Calibrated,
-        Calibrated
-    };
+    m_Calibration = Calibrated;
 
     acc[0] = m_SparkFunICM20948.agmt.acc.axes.x;
     acc[1] = m_SparkFunICM20948.agmt.acc.axes.y;
@@ -60,11 +40,8 @@ void Magnetometers::SparkFunICM20948::Update() {
     mag[2] = m_SparkFunICM20948.agmt.mag.axes.z;
 
     m_Heading = calculateHeading(acc, mag);
-
-    return;
 }
 
-MagnetometerCalibration Magnetometers::SparkFunICM20948::
-GetCalibration() {
+MagnetometerCalibrationStatus Magnetometers::SparkFunICM20948::GetCalibration() {
     return m_Calibration;
 }

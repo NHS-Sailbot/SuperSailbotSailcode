@@ -8,13 +8,6 @@ namespace Electronics::Types {
         Calibrated,
     };
 
-    struct MagnetometerCalibration {
-        MagnetometerCalibrationStatus System;
-        MagnetometerCalibrationStatus Gyro;
-        MagnetometerCalibrationStatus Accel;
-        MagnetometerCalibrationStatus Mag;
-    };
-
     class MagnetometerBase {
     public:
         virtual ~MagnetometerBase() = default;
@@ -26,6 +19,6 @@ namespace Electronics::Types {
         virtual void Update() = 0;
 
         /// Returns the calibration status of the magnetometer.
-        virtual MagnetometerCalibration GetCalibration() = 0;
+        virtual MagnetometerCalibrationStatus GetCalibration() = 0;
     };
 }

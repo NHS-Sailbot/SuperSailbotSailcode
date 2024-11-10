@@ -7,19 +7,19 @@
 #include <Logging/Logger.h>
 
 #include "Electronics/ElectronicsManager.h"
-#include "Sailing/Autopilot/AutopilotManager.h"
+#include "Sailing/AutopilotManager.h"
 
 using namespace Logging;
 using namespace Electronics;
-using namespace Autopilot;
+using namespace Sailing;
 
 void setup() {
     Logger::Start();
     ElectronicsManager::Start();
-    Autopilot::AutopilotManager::Start();
+    AutopilotManager::Start();
 }
 
 void loop() {
     ElectronicsManager::Update();
-    Autopilot::AutopilotManager::Update();
+    AutopilotManager::Update();
 }
