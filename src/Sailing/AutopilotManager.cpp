@@ -6,4 +6,5 @@ void Sailing::AutopilotManager::Start() {
 }
 
 void Sailing::AutopilotManager::Update() {
+
 }

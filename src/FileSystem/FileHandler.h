@@ -5,7 +5,7 @@
 #include <USBHostMSD/USBHostMSD.h>
 #include "Logging/Logger.h"
 
-class FileSystem {
+class FileHandler {
 public:
     inline static USBHostMSD msd = USBHostMSD();
     inline static mbed::FATFileSystem usb = mbed::FATFileSystem("usb");
@@ -29,7 +29,8 @@ public:
     /// Only reads ascii text files.
     /// Returns false when it fails to read the file.
     /// Includes null terminator
-    static bool ReadFile(const char* path, char*& outBuffer) {
+    /// Should probably be not be used for anything other than json files
+    static bool ReadEntireFile(const char* path, char*& outBuffer) {
         if (!Started) {
             Logging::Logger::Log(F("File system not started"));
             return false;
