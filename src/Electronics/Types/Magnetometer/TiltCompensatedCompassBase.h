@@ -7,23 +7,24 @@
 namespace Electronics::Types {
     struct TiltCompensatedCompassSettings {
         // VERY IMPORTANT!
-        //These are the previously determined offsets and scale factors for accelerometer and magnetometer, using ICM_20948_cal and Magneto
-        //The compass will NOT work well or at all if these are not correct
+        // These are the previously determined offsets and scale factors for accelerometer and magnetometer, using ICM_20948_cal and Magneto
+        // The compass will NOT work well or at all if these are not correct
+        // https://github.com/jremington/ICM_20948-AHRS
 
-        //Accel scale: divide by 16604.0 to normalize. These corrections are quite small and probably can be ignored.
-        float A_B[3] = {  79.60,  -18.56,  383.31};
+        // Accel scale: divide by 16604.0 to normalize. These corrections are quite small and probably can be ignored.
+        float A_B[3] = {  79.60,  -18.56,  383.31 };
         float A_Ainv[3][3] ={
-            {  1.00847,  0.00470, -0.00428},
-            {  0.00470,  1.00846, -0.00328},
-            { -0.00428, -0.00328,  0.99559}
+            {  1.00847,  0.00470, -0.00428 },
+            {  0.00470,  1.00846, -0.00328 },
+            { -0.00428, -0.00328,  0.99559 }
         };
 
-        //Mag scale divide by 369.4 to normalize. These are significant corrections, especially the large offsets.
-        float M_B[3] = { -156.70,  -52.79, -141.07};
-        float M_Ainv[3][3] ={
-            {  1.12823, -0.01142,  0.00980},
-            { -0.01142,  1.09539,  0.00927},
-            {  0.00980,  0.00927,  1.10625}
+        // Mag scale divide by 369.4 to normalize. These are significant corrections, especially the large offsets.
+        float M_B[3] = { -156.70,  -52.79, -141.07 };
+        float M_Ainv[3][3] = {
+            {  1.12823, -0.01142,  0.00980 },
+            { -0.01142,  1.09539,  0.00927 },
+            {  0.00980,  0.00927,  1.10625 }
         };
 
         // local magnetic declination in degrees
@@ -37,7 +38,7 @@ namespace Electronics::Types {
         It should be defined as pointing forward,
         parallel to the ground, with coordinates {X, Y, Z} (in magnetometer frame of reference).
         */
-        float p[3] = {1.0f, 0.0f, 0.0f};  //X marking on sensor board points toward yaw = 0
+        float p[3] = {1.0f, 0.0f, 0.0f};  // X marking on sensor board points toward yaw = 0
     };
 
     class TiltCompensatedCompassBase : public MagnetometerBase {
