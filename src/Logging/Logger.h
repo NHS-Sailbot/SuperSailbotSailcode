@@ -12,15 +12,13 @@ namespace Logging {
     class Logger {
     public:
         static void Start() {
-            SerialManager::Start();
-            
+            if (HasBegun) { return; } // Prevent starting the logger multiple times
             HasBegun = true;
+            
             Log(F("Logger started!"));
 
             Log(F("Pre-start logs:"));
-            for (const char *log : PreStartLogs) {
-                Log(log);
-            }
+            for (const char *log : PreStartLogs) {Log(log);}
             PreStartLogs.clear();
         }
 
@@ -30,6 +28,8 @@ namespace Logging {
                 PreStartLogs.push_back(message);
                 return;
             }
+
+            // Serial Logging
             SerialManager::GetSerial().print(message);
             if (newLine) {SerialManager::GetSerial().println();}
         }
@@ -39,6 +39,8 @@ namespace Logging {
                 PreStartLogs.push_back(message.c_str());
                 return;
             }
+
+            // Serial Logging
             SerialManager::GetSerial().print(message);
             if (newLine) {SerialManager::GetSerial().println();}
         }

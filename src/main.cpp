@@ -8,19 +8,23 @@
 
 #include "Electronics/ElectronicsManager.h"
 #include "Sailing/AutopilotManager.h"
+#include "Utilities/LEDStuff.h"
 
 using namespace Logging;
 using namespace Electronics;
 using namespace Sailing;
 
 void setup() {
-    Logger::Start();
+    SerialManager::Start();
     ElectronicsManager::Start();
     AutopilotManager::Start();
 }
 
 void loop() {
+    //LEDStuff::SetRGB(true, false, false); // Set LED to red
     SerialManager::Update();
-    //ElectronicsManager::Update();
-    //AutopilotManager::Update();
+    //LEDStuff::SetRGB(false, true, false); // Set LED to green
+    ElectronicsManager::Update();
+    //LEDStuff::SetRGB(false, false, true); // Set LED to blue
+    AutopilotManager::Update();
 }

@@ -3,13 +3,19 @@
 #include "UbloxGpsBase.h"
 #include <Logging/Logger.h>
 
+#include "Utilities/LEDStuff.h"
+
 using namespace Logging;
 using namespace Electronics::Types;
 
 void UbloxGpsBase::Update() {
-
+    if (!m_UbloxGnss.getPVT()){
+        return; // No data available
+    }
+    
     // 0=no fix, 1=dead reckoning, 2=2D, 3=3D, 4=GNSS, 5=Time fix
     const uint8_t fixType = m_UbloxGnss.getFixType();
+    
     if (fixType == 0 || fixType == 5) {
         m_Fix = NoFix;
     } else if (fixType == 1) {
@@ -23,9 +29,13 @@ void UbloxGpsBase::Update() {
         return;
     }
 
+    LEDStuff::SetRGB(true, false, false);
+
     const double latitude = static_cast<double>(m_UbloxGnss.getLatitude()) / 10000000.0;
     const double longitude = static_cast<double>(m_UbloxGnss.getLongitude()) / 10000000.0;
 
+    LEDStuff::SetRGB(false, false, true);
+    
     if (latitude == 0 || longitude == 0) {
         Logger::Log(F("GPS data invalid or unavailable... keeping old data."));
         return;
@@ -35,6 +45,8 @@ void UbloxGpsBase::Update() {
     m_Longitude = longitude;
     m_Speed = static_cast<double>(m_UbloxGnss.getGroundSpeed()) / 1000.0;
     m_Heading = static_cast<double>(m_UbloxGnss.getHeading()) / 100000.0;
+    
+    LEDStuff::SetRGB(false, false, false);
 }
 
 GpsFix UbloxGpsBase::GetFix() {
