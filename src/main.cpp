@@ -20,6 +20,7 @@ void setup() {
 }
 
 void loop() {
-    ElectronicsManager::Update();
-    AutopilotManager::Update();
+    SerialManager::Update();
+    //ElectronicsManager::Update();
+    //AutopilotManager::Update();
 }

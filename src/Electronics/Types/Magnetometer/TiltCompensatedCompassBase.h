@@ -27,18 +27,19 @@ namespace Electronics::Types {
             {  0.00980,  0.00927,  1.10625 }
         };
 
-        // local magnetic declination in degrees
+        /// local magnetic declination in degrees
         float declination = 14.84;
-
-        /*
-        This tilt-compensated code assumes that the ICM_90248 sensor board is oriented with Accel X pointing
-        to the North, Y pointing West, and Z pointing up for heading = 0 degrees
-        The code compensates for tilts of up to 90 degrees away from horizontal.
-        Facing vector p is the direction of travel and allows reassigning these directions.
-        It should be defined as pointing forward,
-        parallel to the ground, with coordinates {X, Y, Z} (in magnetometer frame of reference).
-        */
-        float p[3] = {1.0f, 0.0f, 0.0f};  // X marking on sensor board points toward yaw = 0
+        
+        /// This tilt-compensated code assumes that the ICM_90248 sensor board is oriented
+        /// with Accel X pointing to the North, Y pointing West, and Z pointing up for heading = 0 degrees.
+        /// The code compensates for tilts of up to 90 degrees away from horizontal.
+        /// Facing vector p is the direction of travel and allows reassigning these directions.
+        /// It should be defined as pointing forward,
+        /// parallel to the ground, with coordinates {X, Y, Z} (in magnetometer frame of reference).
+        /// For example, if the sensor board is mounted flat on a vehicle, facing forward, p = {1, 0, 0}.
+        /// if the sensor board is mounted flat on a vehicle, facing to the right, p = {0, 1, 0}.
+        /// Idk if this is clear, just make electrical not point the magnetometer in a weird direction.
+        float facingVector[3] = {1.0f, 0.0f, 0.0f};
     };
 
     class TiltCompensatedCompassBase : public MagnetometerBase {

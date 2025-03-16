@@ -4,21 +4,17 @@
 
 #include <Arduino.h>
 
-namespace Logging {
-    struct LoggerSettings {
-        HardwareSerial *serial = &Serial;
-        unsigned long baudRate = 115200;
-    };
+#include "Utilities/SerialManager.h"
 
+using namespace Utilitys;
+
+namespace Logging {
     class Logger {
     public:
-        static void Start(LoggerSettings settings = {}) {
-            LoggingSettings = settings;
-            LoggingSettings.serial->begin(settings.baudRate);
+        static void Start() {
+            SerialManager::Start();
+            
             HasBegun = true;
-
-            delay(2500); // This is here so we can see the start of the program in the serial monitor
-
             Log(F("Logger started!"));
 
             Log(F("Pre-start logs:"));
@@ -34,8 +30,17 @@ namespace Logging {
                 PreStartLogs.push_back(message);
                 return;
             }
-            LoggingSettings.serial->print(message);
-            if (newLine) { LoggingSettings.serial->println(); }
+            SerialManager::GetSerial().print(message);
+            if (newLine) {SerialManager::GetSerial().println();}
+        }
+
+        static void Log(const String& message, const bool newLine = true) {
+            if (!HasBegun) {
+                PreStartLogs.push_back(message.c_str());
+                return;
+            }
+            SerialManager::GetSerial().print(message);
+            if (newLine) {SerialManager::GetSerial().println();}
         }
 
         /// Log a message to all active log outputs
@@ -45,9 +50,6 @@ namespace Logging {
     private:
         /// Is used to check if the logger has been started
         inline static bool HasBegun = false;
-
-        /// The serial port to log to
-        inline static LoggerSettings LoggingSettings = {};
 
         /// Vector of things logged before the logger was started
         inline static std::vector<const char *> PreStartLogs;

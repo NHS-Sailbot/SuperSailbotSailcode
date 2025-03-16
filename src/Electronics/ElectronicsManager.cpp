@@ -4,7 +4,7 @@
 
 #include <Wire.h>
 #include "Implementations/GPS/UBlox/UbloxGpsI2c.h"
-#include "Implementations/LimitSwitches/InterruptLimitSwitchMethod.h"
+#include "Implementations/LimitSwitches/InterruptLimitSwitchWithCallbacks.h"
 #include "Implementations/Magnetometers/SparkFunICM20948.h"
 #include "Implementations/Servos/ArduinoServo.h"
 #include "Implementations/WindSensors/AnalogWindSensorWithMagnetometerCorrection.h"
@@ -21,8 +21,8 @@ namespace Electronics {
         Wire.setClock(400000);
 
         WinchServo = new Servos::ArduinoServo(9, 1080);
-        MinLimitSwitchWinch = new InterruptLimitSwitchMethod(2, [] {});
-        MaxLimitSwitchWinch = new InterruptLimitSwitchMethod(3, [] {});
+        MinLimitSwitchWinch = new InterruptLimitSwitchWithCallbacks(2);
+        MaxLimitSwitchWinch = new InterruptLimitSwitchWithCallbacks(3);
         JibWinchServo = new Servos::ArduinoServo(11, 180);
         RudderServo = new Servos::ArduinoServo(10, 180);
 
