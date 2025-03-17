@@ -11,6 +11,6 @@ namespace Electronics::Types {
         virtual void Update() = 0;
 
         /// Returns the wind direction in degrees, 0 is north, 90 is east, 180 is south, 270 is west
-        virtual double GetWindDirection() = 0;
+        virtual double GetDirection() = 0;
     };
 }

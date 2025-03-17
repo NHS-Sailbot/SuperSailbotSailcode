@@ -21,10 +21,7 @@ void setup() {
 }
 
 void loop() {
-    //LEDStuff::SetRGB(true, false, false); // Set LED to red
     SerialManager::Update();
-    //LEDStuff::SetRGB(false, true, false); // Set LED to green
     ElectronicsManager::Update();
-    //LEDStuff::SetRGB(false, false, true); // Set LED to blue
     AutopilotManager::Update();
 }

@@ -14,6 +14,8 @@ namespace Utilitys {
     class SerialManager {
     public:
         inline static bool HasStarted = false;
+        inline static bool FoundApi = false;
+        
         inline static SerialSettings Settings;
     
         static void Start(SerialSettings settings = SerialSettings());

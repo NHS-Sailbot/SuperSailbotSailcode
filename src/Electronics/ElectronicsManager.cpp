@@ -9,6 +9,7 @@
 #include "Implementations/Servos/ArduinoServo.h"
 #include "Implementations/WindSensors/AnalogWindSensorWithMagnetometerCorrection.h"
 #include "Logging/Logger.h"
+#include <ArduinoJson.h>
 
 using namespace Electronics::Implementations;
 using namespace Logging;
@@ -53,6 +54,29 @@ namespace Electronics {
     void ElectronicsManager::Update() {
         Gps->Update();
         WindSensor->Update();
-        Magnetometer->Update();
+        //Magnetometer->Update();
+
+        static unsigned long lastTelemetry = 0;
+        if (millis() - lastTelemetry >= 500) {
+            lastTelemetry = millis();
+            SendTelemetry();
+        }
+    }
+
+    void ElectronicsManager::SendTelemetry() {
+        if (!SerialManager::FoundApi) { return; }
+        
+        JsonDocument doc;
+        doc["type"] = "telemetry";
+        doc["gps"]["fix"] = Gps->GetFix();
+        doc["gps"]["latitude"] = Gps->GetLatitude();
+        doc["gps"]["longitude"] = Gps->GetLongitude();
+        doc["gps"]["speed"] = Gps->GetSpeed();
+        doc["gps"]["heading"] = Gps->GetHeading();
+        doc["magnetometer"]["heading"] = Magnetometer->GetHeading();
+        doc["windSensor"]["direction"] = WindSensor->GetDirection();
+
+        serializeJson(doc, SerialManager::GetSerial());
+        SerialManager::GetSerial().println();
     }
 }

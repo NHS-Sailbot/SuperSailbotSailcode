@@ -14,7 +14,6 @@ namespace Electronics::Implementations::Gps {
             return;
         }
         m_UbloxGnss.setI2COutput(COM_TYPE_UBX);
-        m_UbloxGnss.saveConfigSelective(VAL_CFG_SUBSEC_IOPORT);
 
         Logger::Log(F("Ublox GPS initialized!"));
     }

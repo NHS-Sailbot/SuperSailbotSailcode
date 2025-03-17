@@ -20,9 +20,14 @@ void SerialManager::Start(const SerialSettings settings) {
 void SerialManager::IdentifyDevice() {
     int x = 80085;
     const char* bytes = static_cast<char*>(static_cast<void*>(&x));
+
+    LEDStuff::SetRGB(true, false, false); // Set LED to red for identification
     GetSerial().write(bytes, 4); // Send the unique identifier
     delay(5000); // Wait for 5 seconds to allow the receiving end to process the identifier
-
+    LEDStuff::SetRGB(false, false, false); // Turn off the LED after identification
+    
+    FoundApi = true; // Mark that the API has been found
+    
     Logging::Logger::Start();
 }
 

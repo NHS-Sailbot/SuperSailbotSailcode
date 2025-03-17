@@ -25,7 +25,6 @@ void UbloxGpsBase::Update() {
     }
 
     if (m_Fix == NoFix) {
-        Logger::Log(F("GPS data invalid or unavailable... keeping old data."));
         return;
     }
 

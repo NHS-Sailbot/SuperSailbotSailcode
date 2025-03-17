@@ -11,7 +11,7 @@ namespace Electronics::Implementations::WindSensors {
     public:
         AnalogWindSensorWithMagnetometerCorrection(uint8_t windSensorPin, Types::MagnetometerBase *magnetometer);
         void Update() override;
-        double GetWindDirection() override;
+        double GetDirection() override;
 
     private:
         uint8_t m_WindSensorPin;

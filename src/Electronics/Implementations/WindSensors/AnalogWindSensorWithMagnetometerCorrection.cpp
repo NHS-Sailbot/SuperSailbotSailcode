@@ -17,7 +17,7 @@ namespace Electronics::Implementations::WindSensors {
         m_WindDirection = windDirectionRelative;
     }
 
-    double AnalogWindSensorWithMagnetometerCorrection::GetWindDirection() {
+    double AnalogWindSensorWithMagnetometerCorrection::GetDirection() {
         return m_WindDirection;
     }
 }
