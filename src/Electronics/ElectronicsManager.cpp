@@ -54,7 +54,7 @@ namespace Electronics {
     void ElectronicsManager::Update() {
         Gps->Update();
         WindSensor->Update();
-        //Magnetometer->Update();
+        Magnetometer->Update();
 
         static unsigned long lastTelemetry = 0;
         if (millis() - lastTelemetry >= 500) {

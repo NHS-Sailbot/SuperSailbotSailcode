@@ -26,7 +26,7 @@ namespace Utilitys {
 
         static void Update();
 
-        static bool RegisterCallback(const std::function<void()>& callback, const uint8_t index);
+        static bool RegisterCallback(const std::function<void()>& callback, uint8_t index);
 
         static bool DeregisterCallback(int index);
 
