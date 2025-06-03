@@ -30,6 +30,7 @@ The project is structured as follows:
 - `platformio.ini`: The configuration file for the project.
 
 # Compiling and Running the Project
+    You should just be able to click the play button in your IDE.
 
 ![Image](Resources/SoTrue.jpeg "So True")
 idfk figure it out
