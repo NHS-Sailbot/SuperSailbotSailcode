@@ -1,13 +1,23 @@
-﻿import os
-home_dir = os.path.expanduser("~")
-platformio_dir = os.path.join(home_dir, ".platformio")
-tools_dir = os.path.join(platformio_dir, "penv", "Lib", "site-packages", "platformio", "builder", "tools")
-pioupload = os.path.join(tools_dir, "pioupload.py")
+﻿import sys
+import os
 
-# replace " 5 " with " 25 "
+for path in sys.path:
+    if path.endswith("builder"):
+        builder_path = path
+        break
 
-with open(pioupload, "r") as file:
-    content = file.read()
+if not builder_path:
+    print("Could not find builder path in sys.path, waiting for PlatformIO to fix this...")
+else:
+    pio_path = os.path.join(builder_path, "tools", "pioupload.py")
+    
+if not os.path.exists(pio_path):
+    print("pioupload.py not found! Is PlatformIO installed? Path checked:", pio_path)
+    exit(-1)
+else:
+    with open(pio_path, "r") as file:
+        content = file.read()
     content = content.replace(" 5 ", " 25 ")
-with open(pioupload, "w") as file:
-    file.write(content)
+    with open(pio_path, "w") as file:
+        file.write(content)
+    print("pioupload.py has been fixed!")
