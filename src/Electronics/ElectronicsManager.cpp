@@ -18,8 +18,8 @@ namespace Electronics {
     void ElectronicsManager::Start() {
         Logger::Log(F("Starting electronics..."));
 
-        Wire.begin();
-        Wire.setClock(400000);
+        Wire1.begin();
+        Wire1.setClock(400000);
 
         WinchServo = new Servos::ArduinoServo(9, 1080);
         MinLimitSwitchWinch = new InterruptLimitSwitchWithCallbacks(2);
@@ -27,9 +27,9 @@ namespace Electronics {
         JibWinchServo = new Servos::ArduinoServo(11, 180);
         RudderServo = new Servos::ArduinoServo(10, 180);
 
-        Gps = new Gps::UbloxGpsI2c(&Wire, 0x66);
+        Gps = new Gps::UbloxGpsI2c(&Wire1, 0x66);
 
-        Magnetometer = new Magnetometers::SparkFunICM20948(&Wire, 0x69, {
+        Magnetometer = new Magnetometers::SparkFunICM20948(&Wire1, 0x69, {
             { 79.60,  -18.56,  383.31 },
             {
                 { 1.00847, 0.00470, -0.00428 },
