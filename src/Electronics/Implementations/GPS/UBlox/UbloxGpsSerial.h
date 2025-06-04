@@ -7,6 +7,6 @@
 namespace Electronics::Implementations::Gps {
     class UbloxGpsSerial final : public Types::UbloxGpsBase {
     public:
-        explicit UbloxGpsSerial(HardwareSerial* serialPort);
+        explicit UbloxGpsSerial(HardwareSerial& serialPort);
     };
 }

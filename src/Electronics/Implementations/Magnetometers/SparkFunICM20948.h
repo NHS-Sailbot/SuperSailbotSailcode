@@ -8,7 +8,7 @@
 namespace Electronics::Implementations::Magnetometers {
     class SparkFunICM20948 final : public Types::TiltCompensatedCompassBase {
     public:
-        SparkFunICM20948(MbedI2C *i2cWire, uint8_t address, Types::TiltCompensatedCompassSettings settings);
+        SparkFunICM20948(MbedI2C& i2cWire, uint8_t address, Types::TiltCompensatedCompassSettings settings);
 
         void Update() override;
 

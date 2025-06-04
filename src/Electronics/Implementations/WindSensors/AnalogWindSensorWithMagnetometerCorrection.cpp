@@ -3,7 +3,7 @@
 #include "AnalogWindSensorWithMagnetometerCorrection.h"
 
 namespace Electronics::Implementations::WindSensors {
-    AnalogWindSensorWithMagnetometerCorrection::AnalogWindSensorWithMagnetometerCorrection(uint8_t windSensorPin, Types::MagnetometerBase *magnetometer) {
+    AnalogWindSensorWithMagnetometerCorrection::AnalogWindSensorWithMagnetometerCorrection(uint8_t windSensorPin, Types::MagnetometerBase* magnetometer) {
         m_WindSensorPin = windSensorPin;
         pinMode(m_WindSensorPin, INPUT);
         m_Magnetometer = magnetometer;
