@@ -29,22 +29,26 @@ namespace Electronics {
 
         Gps = new Gps::UbloxGpsI2c(Wire1, 0x66);
 
-        Magnetometer = new Magnetometers::SparkFunICM20948(Wire1, 0x69, {
-            { 79.60,  -18.56,  383.31 },
-            {
-                { 1.00847, 0.00470, -0.00428 },
-                { 0.00470, 1.00846, -0.00328 },
-                { -0.00428, -0.00328, 0.99559 }
-            },
-            { -156.70, -52.79, -141.07 },
-            {
-                { 1.12823, -0.01142, 0.00980 },
-                { -0.01142, 1.09539, 0.00927 },
-                { 0.00980, 0.00927, 1.10625 }
-            },
-            14.84,
-            {1.0f, 0.0f, 0.0f}
-        });
+        Magnetometer = new Magnetometers::SparkFunICM20948(
+            Types::TiltCompensatedCompassSettings{
+                .A_B = { 79.60,  -18.56,  383.31 },
+                .A_Ainv = {
+                    { 1.00847, 0.00470, -0.00428 },
+                    { 0.00470, 1.00846, -0.00328 },
+                    { -0.00428, -0.00328, 0.99559 }
+                },
+                
+                .M_B = { -156.70, -52.79, -141.07 },
+                .M_Ainv = {
+                    { 1.12823, -0.01142, 0.00980 },
+                    { -0.01142, 1.09539, 0.00927 },
+                    { 0.00980, 0.00927, 1.10625 }
+                },
+
+                .declination = 14.84,
+
+                .facingVector = {1.0f, 0.0f, 0.0f}
+            }, Wire1, 0x68);
 
         WindSensor = new WindSensors::AnalogWindSensorWithMagnetometerCorrection(A0, Magnetometer);
 
