@@ -7,7 +7,7 @@
 #include "Electronics/Types/WindSensor/WindSensorBase.h"
 
 namespace Electronics::Implementations::WindSensors {
-    class AnalogWindSensorWithMagnetometerCorrection : public Types::WindSensorBase {
+    class AnalogWindSensorWithMagnetometerCorrection final : public Types::WindSensorBase {
     public:
         AnalogWindSensorWithMagnetometerCorrection(uint8_t windSensorPin, Types::MagnetometerBase* magnetometer);
         void Update() override;

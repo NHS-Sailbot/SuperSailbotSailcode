@@ -7,9 +7,9 @@
 #include "Implementations/LimitSwitches/InterruptLimitSwitchWithCallbacks.h"
 #include "Implementations/Magnetometers/SparkFunICM20948.h"
 #include "Implementations/Servos/ArduinoServo.h"
-#include "Implementations/WindSensors/AnalogWindSensorWithMagnetometerCorrection.h"
 #include "Logging/Logger.h"
 #include <ArduinoJson.h>
+#include "Implementations/WindSensors/FancyWindSensor.h"
 
 using namespace Electronics::Implementations;
 using namespace Logging;
@@ -20,6 +20,9 @@ namespace Electronics {
 
         Wire1.begin();
         Wire1.setClock(400000);
+        
+        Wire.begin();
+        Wire.setClock(400000);
 
         WinchServo = new Servos::ArduinoServo(9, 1080);
         MinLimitSwitchWinch = new InterruptLimitSwitchWithCallbacks(2);
@@ -27,7 +30,7 @@ namespace Electronics {
         JibWinchServo = new Servos::ArduinoServo(11, 180);
         RudderServo = new Servos::ArduinoServo(10, 180);
 
-        Gps = new Gps::UbloxGpsI2c(Wire1, 0x66);
+        Gps = new Gps::UbloxGpsI2c(Wire1, 0x42);
 
         Magnetometer = new Magnetometers::SparkFunICM20948(
             Types::TiltCompensatedCompassSettings{
@@ -50,7 +53,8 @@ namespace Electronics {
                 .facingVector = {1.0f, 0.0f, 0.0f}
             }, Wire1, 0x68);
 
-        WindSensor = new WindSensors::AnalogWindSensorWithMagnetometerCorrection(A0, Magnetometer);
+        WindSensor = new WindSensors::FancyWindSensor(Magnetometer, 0.0,Wire);
+
 
         Logger::Log(F("Electronics started!"));
     }

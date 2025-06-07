@@ -2,9 +2,9 @@
 
 namespace Electronics::Types {
     enum GpsFix {
-        DeadReckoning,
-        NoFix,
-        Fix,
+        DeadReckoning = 0,
+        NoFix = 1,
+        Fix = 2,
     };
 
     class GpsBase {
