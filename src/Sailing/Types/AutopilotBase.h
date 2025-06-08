@@ -2,14 +2,11 @@
 
 #pragma once
 
-namespace Sailing {
+namespace Sailing::Types {
     class AutopilotBase {
     public:
         virtual ~AutopilotBase() = default;
-
-        /// Initializes the autopilot
-        virtual void Start() = 0;
-
+        
         /// Updates the autopilot
         virtual void Update() = 0;
     };

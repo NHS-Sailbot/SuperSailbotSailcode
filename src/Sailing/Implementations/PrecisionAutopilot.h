@@ -3,7 +3,15 @@
 #pragma once
 
 #include "Sailing/Types/AutopilotBase.h"
-
-class PrecisionAutopilot : public Sailing::AutopilotBase {
-
-};
+namespace Sailing::Implementations {
+    class PrecisionAutopilot : public Sailing::Types::AutopilotBase {
+    public:
+        PrecisionAutopilot() {
+        }
+        
+        virtual void Update() override {
+            
+        }
+    private:
+    };
+}

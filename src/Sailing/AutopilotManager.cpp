@@ -2,9 +2,14 @@
 
 #include "AutopilotManager.h"
 
-void Sailing::AutopilotManager::Start() {
-}
+#include "Implementations/PrecisionAutopilot.h"
 
-void Sailing::AutopilotManager::Update() {
+namespace Sailing {
+    void AutopilotManager::Start() {
+        m_Autopilot = new Implementations::PrecisionAutopilot;
+    }
 
+    void AutopilotManager::Update() {
+        m_Autopilot->Update();
+    }
 }

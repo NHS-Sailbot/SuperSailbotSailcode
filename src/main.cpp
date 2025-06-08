@@ -8,15 +8,18 @@
 
 #include "Electronics/ElectronicsManager.h"
 #include "Sailing/AutopilotManager.h"
+#include "Waypoint/WaypointManager.h"
 
 using namespace Logging;
 using namespace Electronics;
 using namespace Sailing;
+using namespace Waypoints;
 
 void setup() {
     SerialManager::Start();
     ElectronicsManager::Start();
     AutopilotManager::Start();
+    WaypointManager::Start();
 }
 
 void loop() {

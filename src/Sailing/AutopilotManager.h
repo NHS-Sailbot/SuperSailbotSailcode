@@ -9,6 +9,6 @@ namespace Sailing {
         static void Start();
         static void Update();
     private:
-        inline static AutopilotBase *m_Autopilot = nullptr;
+        inline static Types::AutopilotBase *m_Autopilot = nullptr;
     };
 }
