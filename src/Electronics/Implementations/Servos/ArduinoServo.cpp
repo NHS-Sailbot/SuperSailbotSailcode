@@ -18,7 +18,8 @@ namespace Electronics::Implementations {
     }
 
     void Servos::ArduinoServo::SetAngle(int angle) {
-        angle = map(angle, 0, 180, 0, m_RotationRange);
+        angle = map(angle, 0, m_RotationRange, 0, 180);
         m_Angle = angle;
+        m_Servo.write(angle);
     }
 }
