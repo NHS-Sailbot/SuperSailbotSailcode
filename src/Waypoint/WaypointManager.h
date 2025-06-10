@@ -5,14 +5,15 @@
 #include <vector>
 #include "Waypoint.h"
 #include <ArduinoJson.h>
-
 #include "Logging/Logger.h"
+
+using namespace Logging;
 
 namespace Waypoints {
     class WaypointManager {
     public:
         inline static std::vector<Waypoint> waypoints;
-        inline static std::vector<Utilitys::Point2D> restrictedAreas;
+        inline static std::vector<Point2D> restrictedAreas;
 
         static void Start() {
             waypoints.clear();
@@ -36,9 +37,16 @@ namespace Waypoints {
                 double lng = ra["lng"];
                 restrictedAreas.emplace_back(lat, lng);
             }
+
+            // Log the number of waypoints and restricted areas loaded
+            Logger::Log(F("Loaded "), false);
+            Logger::Log(String(waypoints.size()), false);
+            Logger::Log(F(" waypoints and "), false);
+            Logger::Log(String(restrictedAreas.size()), false);
+            Logger::Log(F(" restricted area nodes."));
         }
 
     private:
-        static const char* json;
+        const static char* json;
     };
 }
