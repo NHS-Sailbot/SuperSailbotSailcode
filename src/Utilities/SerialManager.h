@@ -21,6 +21,7 @@ namespace Utilitys {
         static void Start(SerialSettings settings = SerialSettings());
 
         static void IdentifyDevice();
+        static void Heartbeat();
 
         static HardwareSerial &GetSerial();
 

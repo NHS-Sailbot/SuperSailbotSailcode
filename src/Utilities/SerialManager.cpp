@@ -10,11 +10,19 @@ void SerialManager::Start(const SerialSettings settings) {
     Settings = settings;
     Settings.serial->setTimeout(5000); // Set a timeout for serial reads
     Settings.serial->begin(settings.baudRate);
-    Settings.serial->flush();
+    Settings.serial->flush(); // no idea if this does anything
     
     HasStarted = true;
 
+
+#if NO_API
+    delay(5000);
+    FoundApi = true;
+    Logging::Logger::Start();
+#else
     RegisterCallback(IdentifyDevice, 255); // Register a callback for the unique identifier
+    RegisterCallback(Heartbeat, 254); // Register a callback for the heartbeat
+#endif
 }
 
 void SerialManager::IdentifyDevice() {
@@ -29,6 +37,11 @@ void SerialManager::IdentifyDevice() {
     FoundApi = true; // Mark that the API has been found
     
     Logging::Logger::Start();
+}
+
+void SerialManager::Heartbeat() {
+    if (!HasStarted) { Start(); } // Ensure Serial is started before sending heartbeat
+    GetSerial().write("HEARTBEAT\n"); // Send a heartbeat message
 }
 
 HardwareSerial& SerialManager::GetSerial() {

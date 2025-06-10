@@ -17,6 +17,35 @@ namespace Electronics::Implementations::WindSensors {
 			m_Wire->beginTransmission(m_Address);
 			m_Wire->write(register_to_read);
 			m_Wire->endTransmission(false);
+
+			while (true) {
+				m_Wire->beginTransmission(m_Address);
+				m_Wire->write(register_to_read);
+				m_Wire->endTransmission(false);
+				m_Wire->requestFrom(m_Address, 2);
+
+				// Wait for 5 seconds and check for available data
+				delay(5000);
+
+				Logging::Logger::Log(F("Data available from wind sensor: "), false);
+				Logging::Logger::Log(static_cast<String>(m_Wire->available()));
+				if (m_Wire->available() >= 2) {
+					uint8_t mostSignificantByte = m_Wire->read();
+					uint8_t leastSignificantByte = m_Wire->read();
+
+					// Combine the two bytes into a single 16-bit value.
+					uint16_t raw_value = (mostSignificantByte << 8) | leastSignificantByte;
+
+					double windDirectionFromSensor = static_cast<double>(raw_value) * 360.0 / 65535.0;
+
+					m_WindDirection = fmod(windDirectionFromSensor + m_Offset + m_Magnetometer->GetHeading(), 360.0);
+				} else {
+					m_WindDirection = -1.0;
+				}
+
+				Logging::Logger::Log(F("Wind direction initialized: "), false);
+				Logging::Logger::Log(static_cast<String>(m_WindDirection));
+			}
 		}
 
 		void Update() override {
