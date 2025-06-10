@@ -73,7 +73,7 @@ namespace Sailing::Implementations {
             }
         }
 
-        void double DesiredHeading() {
+        double DesiredHeading() {
             double waypointCourse = Waypoint::courseTo(ElectronicsManager::Gps->GetPosition(), WaypointManager::waypoints[m_TargetWaypointIndex].m_Position);
             double relativeWindDirection = GetRelativeWindDirection(waypointCourse);
             bool isTackingNeeded = isRelativeWindDirectionInIrons(relativeWindDirection);
@@ -140,7 +140,7 @@ namespace Sailing::Implementations {
                 tackingCourse = portTackCourse;
             }
 
-            return tackingCourse();
+            return tackingCourse;
         }
 
         static double GetRelativeWindDirection(double bearing) {

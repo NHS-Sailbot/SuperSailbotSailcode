@@ -2,10 +2,20 @@
 
 #include "AutopilotManager.h"
 
+#include "Implementations/PrecisionAutopilot.h"
+
 namespace Sailing {
     void AutopilotManager::Start() {
+        m_Autopilot = new Implementations::PrecisionAutopilot (
+            45.0, // inIronsAngle
+            15.0, // distanceToChangeTack
+            5.0,  // allowedHeadingError
+            1.0,  // allowedSailOutError
+            45.0  // maxRudderAngle
+        );
     }
 
     void AutopilotManager::Update() {
+        m_Autopilot->Update();
     }
 }
