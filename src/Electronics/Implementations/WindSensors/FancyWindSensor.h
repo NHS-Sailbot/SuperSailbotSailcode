@@ -14,7 +14,6 @@ namespace Electronics::Implementations::WindSensors {
 		}
 
 		void Update() override {
-			ElectronicsManager::Magnetometer->GetCalibration();
 		}
 
 		double GetDirection() override {

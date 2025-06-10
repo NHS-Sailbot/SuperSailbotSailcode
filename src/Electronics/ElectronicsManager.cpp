@@ -9,6 +9,8 @@
 #include "Implementations/Servos/ArduinoServo.h"
 #include "Logging/Logger.h"
 #include <ArduinoJson.h>
+
+#include "Implementations/Servos/WinchServo.h"
 #include "Implementations/WindSensors/FancyWindSensor.h"
 
 using namespace Electronics::Implementations;
@@ -24,7 +26,7 @@ namespace Electronics {
         Wire.begin();
         Wire.setClock(400000);
 
-        WinchServo = new Servos::ArduinoServo(9, 1080);
+        WinchServo = new Servos::WinchServo(9, 1080, 400, 900);
         MinLimitSwitchWinch = new InterruptLimitSwitchWithCallbacks(2);
         MaxLimitSwitchWinch = new InterruptLimitSwitchWithCallbacks(3);
         JibWinchServo = new Servos::ArduinoServo(11, 180);
@@ -61,8 +63,8 @@ namespace Electronics {
 
     void ElectronicsManager::Update() {
         Gps->Update();
-        WindSensor->Update();
         Magnetometer->Update();
+        WindSensor->Update();
 
         static unsigned long lastTelemetry = 0;
         if (millis() - lastTelemetry >= 500) {

@@ -9,10 +9,10 @@ namespace Waypoints {
         m_Radius = radius;
     }
 
-    double Waypoint::courseTo(Utilitys::Point2D point1, Utilitys::Point2D point2) {
+    double Waypoint::courseTo(const Utilitys::Point2D& point1, const Utilitys::Point2D& point2) {
         return courseTo(point1.x, point1.y, point2.x, point2.y);
     }
-    double Waypoint::courseTo(Waypoint waypoint1, Waypoint waypoint2) {
+    double Waypoint::courseTo(const Waypoint& waypoint1, const Waypoint& waypoint2) {
         return courseTo(waypoint1.getLatitude(), waypoint1.getLongitude(), waypoint2.getLatitude(), waypoint2.getLongitude());
     }
     // https://github.com/mikalhart/TinyGPSPlus/blob/master/src/TinyGPS%2B%2B.cpp I stole this from here.
@@ -35,10 +35,10 @@ namespace Waypoints {
         return degrees(a2);
     }
 
-    double Waypoint::distanceBetween(Utilitys::Point2D point1, Utilitys::Point2D point2) {
+    double Waypoint::distanceBetween(const Utilitys::Point2D& point1, const Utilitys::Point2D& point2) {
         return distanceBetween(point1.x, point1.y, point2.x, point2.y);
     }
-    double Waypoint::distanceBetween(Waypoint waypoint1, Waypoint waypoint2) {
+    double Waypoint::distanceBetween(const Waypoint& waypoint1, const Waypoint& waypoint2) {
         return distanceBetween(waypoint1.getLatitude(), waypoint1.getLongitude(), waypoint2.getLatitude(), waypoint2.getLongitude());
     }
     // https://github.com/mikalhart/TinyGPSPlus/blob/master/src/TinyGPS%2B%2B.cpp I stole this from here.
@@ -64,5 +64,9 @@ namespace Waypoints {
         double denom = (slat1 * slat2) + (clat1 * clat2 * cdlong);
         delta = atan2(delta, denom);
         return delta * Constants::RADIUS_OF_EARTH;
+    }
+
+    bool Waypoint::pointIsInRadius(const Utilitys::Point2D& point) const {
+        return distanceBetween(m_Position, point) <= m_Radius;
     }
 }

@@ -14,12 +14,14 @@ namespace Waypoints {
         Utilitys::Point2D m_Position;
         long m_Radius;
 
-        static double courseTo(Utilitys::Point2D point1, Utilitys::Point2D point2);
-        static double courseTo(Waypoint waypoint1, Waypoint waypoint2);
+        static double courseTo(const Utilitys::Point2D& point1, const Utilitys::Point2D& point2);
+        static double courseTo(const Waypoint& waypoint1, const Waypoint& waypoint2);
         static double courseTo(double latitude1, double longitude1, double latitude2, double longitude2);
 
-        static double distanceBetween(Utilitys::Point2D point1, Utilitys::Point2D point2);
-        static double distanceBetween(Waypoint waypoint1, Waypoint waypoint2);
+        static double distanceBetween(const Utilitys::Point2D& point1, const Utilitys::Point2D& point2);
+        static double distanceBetween(const Waypoint& waypoint1, const Waypoint& waypoint2);
         static double distanceBetween(double latitude1, double longitude1, double latitude2, double longitude2);
+
+        bool pointIsInRadius(const Utilitys::Point2D& point) const;
     };
 }

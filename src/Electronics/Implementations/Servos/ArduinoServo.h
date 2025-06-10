@@ -2,17 +2,20 @@
 
 #pragma once
 
+#include <Arduino.h>
 #include <Servo.h>
 #include "Electronics/Types/Servo/ServoBase.h"
 
 namespace Electronics::Implementations::Servos {
-    class ArduinoServo final : public Types::ServoBase {
+    class ArduinoServo : public Types::ServoBase {
     public:
         explicit ArduinoServo(uint8_t pin, int rotationRange = 180);
 
         int GetAngle() override;
 
-        void SetAngle(int angle) override;
+        virtual void SetAngle(int angle) override;
+
+        double GetRotationRange() override { return m_RotationRange; }
 
     private:
         Servo m_Servo;
