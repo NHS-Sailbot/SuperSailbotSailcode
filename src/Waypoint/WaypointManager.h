@@ -22,8 +22,8 @@ namespace Waypoints {
             JsonDocument doc;
             DeserializationError error = deserializeJson(doc, json);
             if (error) {
-                Logging::Logger::Log(F("deserializeJson() failed: "));
-                Logging::Logger::Log(error.c_str());
+                Logger::Log(F("deserializeJson() failed: "));
+                Logger::Log(error.c_str());
                 return;
             }
 

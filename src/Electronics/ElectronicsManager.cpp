@@ -53,7 +53,7 @@ namespace Electronics {
                 .facingVector = {1.0f, 0.0f, 0.0f}
             }, Wire1, 0x68);
 
-        WindSensor = new WindSensors::FancyWindSensor(Magnetometer, 0.0,Wire);
+        WindSensor = new WindSensors::FancyWindSensor(0.0, Serial1);
 
 
         Logger::Log(F("Electronics started!"));
