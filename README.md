@@ -29,6 +29,18 @@ The project is structured as follows:
 - `test/`: The tests for the project.
 - `platformio.ini`: The configuration file for the project.
 
+# Wiring the Arduino
+As of 4/6/2026,
+Pins:
+- SparkfunICM20948 Magnetometer: 'Wire'
+- GPS: 'Wire1'
+- These ones are in the Electronics Manager:
+- WinchServo = new Servos::WinchServo: 'pin 9'
+- MinLimitSwitchWinch = new InterruptLimitSwitchWithCallbacks: 'pin 2'
+- MaxLimitSwitchWinch = new InterruptLimitSwitchWithCallbacks: 'pin 3'
+- JibWinchServo = new Servos::ArduinoServo: 'pin 11'
+- RudderServo = new Servos::ArduinoServo: 'pin 10'
+- WindSensor = new WindSensors::FancyWindSensor: 'Serial3, 115200 baud'
 # Compiling and Running the Project
     You should just be able to click the play button in your IDE.
 
