@@ -41,6 +41,11 @@ Pins:
 - JibWinchServo = new Servos::ArduinoServo: 'pin 11'
 - RudderServo = new Servos::ArduinoServo: 'pin 10'
 - WindSensor = new WindSensors::FancyWindSensor: 'Serial3, 115200 baud'
+# Make sure your pins are right, dumbass
+Especially you, Lucas.
+
+![Image](Resources/LucasIsDumb.jpg "Especially you, Lucas")
+
 # Compiling and Running the Project
     You should just be able to click the play button in your IDE.
 
