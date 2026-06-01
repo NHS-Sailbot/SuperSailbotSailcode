@@ -49,7 +49,7 @@ namespace Sailing::Implementations {
 
         void Update() override {
             const double sailAngle = Degrees::AngularDistance(180.0, ElectronicsManager::WindSensor->GetDirection());
-            const double desiredSailOut = Utilitys::Math::RemapClamped(sailAngle, m_InIronsAngle, 180.0, 0.0, 100.0);
+            const double desiredSailOut = Math::RemapClamped(sailAngle, m_InIronsAngle, 180.0, 0.0, 100.0);
             if (m_AllowedSailOutError < abs(ElectronicsManager::WinchServo->GetAngle() - desiredSailOut)) {
                 ElectronicsManager::WinchServo->SetAngle(static_cast<int>(desiredSailOut));
             }
@@ -151,7 +151,7 @@ namespace Sailing::Implementations {
         }
 
         static double GetRelativeWindDirection(double bearing) {
-            return Utilitys::Degrees::Wrap360(ElectronicsManager::WindSensor->GetDirection() - bearing);
+            return Degrees::Wrap360(ElectronicsManager::WindSensor->GetDirection() - bearing);
         }
 
         bool isRelativeWindDirectionInIrons(double relativeWindDirection) {
