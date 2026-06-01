@@ -3,6 +3,8 @@
 #include "TiltCompensatedCompassBase.h"
 #include <Arduino.h>
 
+#include "Utilities/Degrees.h"
+
 namespace Electronics::Types {
     TiltCompensatedCompassBase::TiltCompensatedCompassBase(TiltCompensatedCompassSettings &settings): m_Settings(settings) {}
 
@@ -32,7 +34,7 @@ namespace Electronics::Types {
         double h = -atan2(vector_dot(W, m_Settings.facingVector), vector_dot(N, m_Settings.facingVector)) * 180 / M_PI;
         //minus: conventional nav, heading increases North to East
         double heading = h + m_Settings.declination;
-        heading = fmod(heading + 360, 360); //apply compass wrap
+        heading = Utilitys::Degrees::Wrap360(heading);
         return heading;
     }
 
