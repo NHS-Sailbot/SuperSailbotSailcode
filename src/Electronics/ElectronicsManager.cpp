@@ -86,7 +86,6 @@ namespace Electronics {
         doc["magnetometer"]["heading"] = Magnetometer->GetHeading();
         doc["windSensor"]["direction"] = WindSensor->GetDirection();
 
-        serializeJson(doc, SerialManager::GetSerial());
-        SerialManager::GetSerial().println();
+        Logger::LogJson(doc);
     }
 }

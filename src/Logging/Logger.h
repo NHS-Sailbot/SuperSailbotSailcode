@@ -3,6 +3,7 @@
 #pragma once
 
 #include <Arduino.h>
+#include <ArduinoJson.h>
 
 #include "Utilities/SerialManager.h"
 
@@ -23,6 +24,8 @@ namespace Logging {
             PreStartFlashLogs.clear();
             for (const char* log : PreStartRamLogs) { Log(log); }
             PreStartRamLogs.clear();
+            for (const String& log : PreStartJsonLogs) { Log(log); }
+            PreStartJsonLogs.clear();
         }
 
         static void Log(const char* message, const bool newLine = true) {
@@ -49,6 +52,17 @@ namespace Logging {
             writeToSerial(message, newLine);
         }
 
+        static void LogJson(JsonVariantConst json, const bool newLine = true) {
+            if (!HasBegun) {
+                String serialized;
+                serializeJson(json, serialized);
+                PreStartJsonLogs.push_back(std::move(serialized));
+                return;
+            }
+            serializeJson(json, SerialManager::GetSerial());
+            if (newLine) { SerialManager::GetSerial().println(); }
+        }
+
     private:
         static void writeToSerial(const char* message, const bool newLine) {
             SerialManager::GetSerial().print(message);
@@ -69,5 +83,6 @@ namespace Logging {
 
         inline static std::vector<const __FlashStringHelper*> PreStartFlashLogs;
         inline static std::vector<const char*> PreStartRamLogs;
+        inline static std::vector<String> PreStartJsonLogs;
     };
 }
