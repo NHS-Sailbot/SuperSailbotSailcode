@@ -19,5 +19,7 @@ namespace Electronics::Types {
         static void staticLimitHit();
 
         uint8_t m_LimitPin;
+        /// Last pin level seen in staticLimitHit (HIGH = open, LOW = pressed with INPUT_PULLUP)
+        int m_LastPinState = HIGH;
     };
 }
