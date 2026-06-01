@@ -6,12 +6,13 @@
 #include "Types/LimitSwitch/LimitSwitchBase.h"
 #include "Types/Magnetometer/MagnetometerBase.h"
 #include "Types/Servo/ServoBase.h"
+#include "Types/Winch/WinchBase.h"
 #include "Types/WindSensor/WindSensorBase.h"
 
 namespace Electronics {
     class ElectronicsManager {
     public:
-        inline static Types::ServoBase *WinchServo = nullptr;
+        inline static Types::WinchBase *WinchServo = nullptr;
         inline static Types::LimitSwitchBase *MinLimitSwitchWinch = nullptr;
         inline static Types::LimitSwitchBase *MaxLimitSwitchWinch = nullptr;
         inline static Types::ServoBase *JibWinchServo = nullptr;

@@ -10,7 +10,7 @@
 #include "Logging/Logger.h"
 #include <ArduinoJson.h>
 
-#include "Implementations/Servos/WinchServo.h"
+#include "Implementations/Winches/MainWinch.h"
 #include "Implementations/WindSensors/FancyWindSensor.h"
 
 using namespace Electronics::Implementations;
@@ -26,7 +26,7 @@ namespace Electronics {
         Wire.begin();
         Wire.setClock(400000);
 
-        WinchServo = new Servos::WinchServo(9, 3600, 1440 , 2160);
+        WinchServo = new Winches::MainWinch(9, 3600, 1440, 2160);
         MinLimitSwitchWinch = new InterruptLimitSwitchWithCallbacks(2);
         MaxLimitSwitchWinch = new InterruptLimitSwitchWithCallbacks(3);
         JibWinchServo = new Servos::ArduinoServo(11, 720); //Double check THIS

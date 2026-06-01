@@ -35,7 +35,7 @@ Pins:
 - SparkfunICM20948 Magnetometer: 'Wire'
 - GPS: 'Wire1'
 - These ones are in the Electronics Manager:
-- WinchServo = new Servos::WinchServo: 'pin 9'
+- WinchServo = new Winches::WinchServo: 'pin 9'
 - MinLimitSwitchWinch = new InterruptLimitSwitchWithCallbacks: 'pin 2'
 - MaxLimitSwitchWinch = new InterruptLimitSwitchWithCallbacks: 'pin 3'
 - JibWinchServo = new Servos::ArduinoServo: 'pin 11'

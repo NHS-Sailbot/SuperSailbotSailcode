@@ -1,0 +1,33 @@
+// Created by sailbot on 6/10/25.
+
+#pragma once
+
+#include <Arduino.h>
+#include "Electronics/Types/Winch/WinchBase.h"
+#include "Electronics/Implementations/Servos/ArduinoServo.h"
+
+namespace Electronics::Implementations::Winches {
+    class MainWinch final : public Types::WinchBase {
+    public:
+        MainWinch(uint8_t pin, int rotationRange, int fullOutAngle, int fullInAngle)
+            : m_Servo(pin, rotationRange),
+              m_FullOutAngle(fullOutAngle),
+              m_FullInAngle(fullInAngle) {}
+
+        double GetLetOutPercentage() override {
+            return m_LetOutPercentage;
+        }
+
+        void SetLetOutPercentage(double percent) override {
+            m_LetOutPercentage = constrain(percent, 0.0, 100.0);
+            const int angle = static_cast<int>(m_FullInAngle + (m_LetOutPercentage / 100.0) * (m_FullOutAngle - m_FullInAngle));
+            m_Servo.SetAngle(angle);
+        }
+
+    private:
+        Servos::ArduinoServo m_Servo;
+        int m_FullOutAngle;
+        int m_FullInAngle;
+        double m_LetOutPercentage = 0.0;
+    };
+}
