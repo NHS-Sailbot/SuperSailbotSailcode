@@ -26,6 +26,7 @@ namespace Electronics {
         /// Updates all electronics
         static void Update();
 
+    private:
         static void SendTelemetry();
     };
 }

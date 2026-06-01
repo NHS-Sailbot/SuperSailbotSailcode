@@ -5,7 +5,9 @@
 #include "WaypointManager.h"
 
 namespace Waypoints{
-    const char* WaypointManager::json = R"json({
+  // TODO: this should be replaced with a same schema and no data once you properly get the runtime sending working.
+  const char* WaypointManager::json = R"json(
+{
   "waypoints": [
     {
       "lat": 42.276637989405806,
@@ -127,5 +129,6 @@ namespace Waypoints{
       "lng": -71.75678372383119
     }
   ]
-})json";
+}
+)json";
 };

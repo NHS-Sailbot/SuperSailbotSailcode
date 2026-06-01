@@ -44,7 +44,7 @@ namespace Sailing::Implementations {
         int m_TargetWaypointIndex = 0;
         TackingState m_CurrentTack = NotInIrons;
 
-        void virtual Update() override {
+        void Update() override {
             int sailAngle = abs(ElectronicsManager::WindSensor->GetDirection() - 180);
             double desiredSailOut = (int)map(sailAngle, m_InIronsAngle, 180, 0, 100);
             if (m_AllowedSailOutError < abs(ElectronicsManager::WinchServo->GetAngle() - desiredSailOut)) {
