@@ -5,6 +5,7 @@
 #include "Implementations/PrecisionAutopilot.h"
 
 namespace Sailing {
+    // TODO: Utilize the API to dynamically set the autopilot used on startup.
     void AutopilotManager::Start() {
         m_Autopilot = new Implementations::PrecisionAutopilot (
             45.0, // inIronsAngle

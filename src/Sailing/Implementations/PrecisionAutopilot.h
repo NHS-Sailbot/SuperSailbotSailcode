@@ -1,3 +1,6 @@
+// TODO: This needs to be entirely reviewed and made sure there are no bugs in its implementation. That's very unlikely. It was never tested. Tragically. I hold the grudge.
+
+
 // Created by sailbot on 6/10/25.
 
 #pragma once
