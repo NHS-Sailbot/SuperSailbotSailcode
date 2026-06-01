@@ -16,14 +16,22 @@ namespace Electronics::Types {
         LimitSwitches.push_back(this);
         m_LimitPin = limitPin;
         pinMode(m_LimitPin, INPUT_PULLUP);
-        attachInterrupt(digitalPinToInterrupt(m_LimitPin), staticLimitHit, FALLING);
+        m_LastPinState = digitalRead(m_LimitPin);
+        attachInterrupt(digitalPinToInterrupt(m_LimitPin), staticLimitHit, CHANGE);
     }
 
     void LimitSwitchBase::staticLimitHit() {
-        for (LimitSwitchBase *limitSwitch: LimitSwitches) {
-            if (digitalRead(limitSwitch->m_LimitPin) == LOW) {
+        for (LimitSwitchBase* limitSwitch : LimitSwitches) {
+            const int currentState = digitalRead(limitSwitch->m_LimitPin);
+            if (currentState == limitSwitch->m_LastPinState) {
+                continue;
+            }
+
+            if (currentState == LOW) {
                 limitSwitch->LimitHit();
             }
+
+            limitSwitch->m_LastPinState = currentState;
         }
     }
 }

@@ -13,7 +13,7 @@ namespace Electronics::Implementations::Servos {
 
         int GetAngle() override;
 
-        virtual void SetAngle(int angle) override;
+        void SetAngle(int angle) override;
 
         double GetRotationRange() override { return m_RotationRange; }
 

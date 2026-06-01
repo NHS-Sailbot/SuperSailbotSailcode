@@ -3,6 +3,7 @@
 #include "UbloxGpsBase.h"
 #include <Logging/Logger.h>
 
+#include "Utilities/Degrees.h"
 #include "Utilities/LEDStuff.h"
 
 using namespace Logging;
@@ -43,7 +44,7 @@ void UbloxGpsBase::Update() {
     m_Latitude = latitude;
     m_Longitude = longitude;
     m_Speed = static_cast<double>(m_UbloxGnss.getGroundSpeed()) / 1000.0;
-    m_Heading = static_cast<double>(m_UbloxGnss.getHeading()) / 100000.0;
+    m_Heading = Degrees::Wrap360(static_cast<double>(m_UbloxGnss.getHeading()) / 100000.0); // No clue if the library actually keeps it on the zero to three sixty.
     
     LEDStuff::SetRGB(false, false, false);
 }

@@ -18,8 +18,8 @@ using namespace Waypoints;
 void setup() {
     SerialManager::Start();
     ElectronicsManager::Start();
-    AutopilotManager::Start();
     WaypointManager::Start();
+    AutopilotManager::Start();
 }
 
 void loop() {

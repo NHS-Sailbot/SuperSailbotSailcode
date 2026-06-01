@@ -3,6 +3,8 @@
 #include "AnalogWindSensorWithMagnetometerCorrection.h"
 
 #include "Electronics/ElectronicsManager.h"
+#include "Utilities/Degrees.h"
+#include "Utilities/Math.h"
 
 namespace Electronics::Implementations::WindSensors {
     AnalogWindSensorWithMagnetometerCorrection::AnalogWindSensorWithMagnetometerCorrection(uint8_t windSensorPin) {
@@ -11,10 +13,10 @@ namespace Electronics::Implementations::WindSensors {
     }
 
     void AnalogWindSensorWithMagnetometerCorrection::Update() {
-        int analogWindDirection = analogRead(m_WindSensorPin);
-        double windDirectionRelative = map(analogWindDirection, 0, 1023, 0, 359);
+        const int analogWindDirection = analogRead(m_WindSensorPin);
+        double windDirectionRelative = Utilitys::Math::Remap(analogWindDirection, 0.0, 1023.0, 0.0, 360.0);
         windDirectionRelative += ElectronicsManager::Magnetometer->GetHeading();
-        windDirectionRelative = fmod(windDirectionRelative, 360);
+        windDirectionRelative = Utilitys::Degrees::Wrap360(windDirectionRelative);
         m_WindDirection = windDirectionRelative;
     }
 

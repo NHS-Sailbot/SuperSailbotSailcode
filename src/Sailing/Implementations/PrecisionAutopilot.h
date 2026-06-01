@@ -1,9 +1,15 @@
+// TODO: This needs to be entirely reviewed and made sure there are no bugs in its implementation. That's very unlikely. It was never tested. Tragically. I hold the grudge.
+
+
 // Created by sailbot on 6/10/25.
 
 #pragma once
 
+#include "Constants.h"
 #include "Electronics/ElectronicsManager.h"
 #include "Sailing/Types/AutopilotBase.h"
+#include "Utilities/Degrees.h"
+#include "Utilities/Math.h"
 #include "Waypoint/Waypoint.h"
 #include "Waypoint/WaypointManager.h"
 
@@ -44,21 +50,24 @@ namespace Sailing::Implementations {
         int m_TargetWaypointIndex = 0;
         TackingState m_CurrentTack = NotInIrons;
 
-        void virtual Update() override {
-            int sailAngle = abs(ElectronicsManager::WindSensor->GetDirection() - 180);
-            double desiredSailOut = (int)map(sailAngle, m_InIronsAngle, 180, 0, 100);
-            if (m_AllowedSailOutError < abs(ElectronicsManager::WinchServo->GetAngle() - desiredSailOut)) {
-                ElectronicsManager::WinchServo->SetAngle(static_cast<int>(desiredSailOut));
+        void Update() override {
+            const double sailAngle = Degrees::AngularDistance(180.0, ElectronicsManager::WindSensor->GetDirection());
+            const double desiredSailOut = Math::RemapClamped(sailAngle, m_InIronsAngle, 180.0, 0.0, 100.0);
+            if (m_AllowedSailOutError < abs(ElectronicsManager::WinchServo->GetLetOutPercentage() - desiredSailOut)) {
+                ElectronicsManager::WinchServo->SetLetOutPercentage(desiredSailOut);
             }
 
             double desiredHeading = DesiredHeading();
             if (desiredHeading != -1) {
-                double headingError = fmod(desiredHeading - ElectronicsManager::Magnetometer->GetHeading(), 360);
-                double idealRudderAngle = constrain(headingError, -m_MaxRudderAngle, m_MaxRudderAngle);
-                double desiredRudderAngle = map(idealRudderAngle, -90, 90, 0, ElectronicsManager::RudderServo->GetRotationRange());
+                double headingError = Degrees::Difference(ElectronicsManager::Magnetometer->GetHeading(), desiredHeading);
 
-                if (abs(ElectronicsManager::RudderServo->GetAngle() - desiredRudderAngle) > 5) {
-                    ElectronicsManager::RudderServo->SetAngle(static_cast<int>(desiredRudderAngle));
+                if (m_AllowedHeadingError < abs(headingError)) {
+                    const double idealRudderAngle = constrain(headingError, -m_MaxRudderAngle, m_MaxRudderAngle);
+                    const double desiredRudderAngle = Math::Remap(idealRudderAngle,-m_MaxRudderAngle,m_MaxRudderAngle,0.0, ElectronicsManager::RudderServo->GetRotationRange());
+
+                    if (abs(ElectronicsManager::RudderServo->GetAngle() - desiredRudderAngle) > 5) {
+                        ElectronicsManager::RudderServo->SetAngle(static_cast<int>(desiredRudderAngle));
+                    }
                 }
             }
 
@@ -103,8 +112,8 @@ namespace Sailing::Implementations {
 
             Logger::Log(F("Recalculating course due to tacking being needed."));
 
-            double starBoardTackCourse = fmod(waypointCourse + abs(m_InIronsAngle - relativeWindDirection), 360);
-            double portTackCourse = abs(fmod(waypointCourse - abs(m_InIronsAngle - relativeWindDirection), 360));
+            double starBoardTackCourse = Degrees::Wrap360(waypointCourse + abs(m_InIronsAngle - relativeWindDirection));
+            double portTackCourse = Degrees::Wrap360(waypointCourse - abs(m_InIronsAngle - relativeWindDirection));
 
             double starBoardTackDistance = WaypointManager::DistanceToRestrictedArea(ElectronicsManager::Gps->GetPosition(), starBoardTackCourse);
             double portTackDistance = WaypointManager::DistanceToRestrictedArea(ElectronicsManager::Gps->GetPosition(), portTackCourse);
@@ -116,7 +125,8 @@ namespace Sailing::Implementations {
                 Logger::Log(F("We are outside the sail zone, picking the best tack course."));
                 if (starBoardTackDistance == -1 && portTackDistance == -1) {
                     Logger::Log(F("Both tacks are outside the sail zone, this is catastrophic... picking the tack with the least change in heading"));
-                    if (starBoardTackCourse < portTackCourse) {
+                    const double currentHeading = ElectronicsManager::Magnetometer->GetHeading();
+                    if (Degrees::AngularDistance(currentHeading, starBoardTackCourse) < Degrees::AngularDistance(currentHeading, portTackCourse)) {
                         m_CurrentTack = StarboardTack;
                         tackingCourse = starBoardTackCourse;
                     } else {
@@ -144,11 +154,11 @@ namespace Sailing::Implementations {
         }
 
         static double GetRelativeWindDirection(double bearing) {
-            return abs(fmod(ElectronicsManager::WindSensor->GetDirection() - bearing, 360));
+            return Degrees::Wrap360(ElectronicsManager::WindSensor->GetDirection() - bearing);
         }
 
         bool isRelativeWindDirectionInIrons(double relativeWindDirection) {
-            return (relativeWindDirection >= 0 && relativeWindDirection <= m_InIronsAngle) || (relativeWindDirection >= 360 - m_InIronsAngle && relativeWindDirection <= 360);
+            return (relativeWindDirection >= 0 && relativeWindDirection <= m_InIronsAngle) || (relativeWindDirection >= Constants::FULL_CIRCLE - m_InIronsAngle && relativeWindDirection < Constants::FULL_CIRCLE);
         }
     };
 }

@@ -13,6 +13,7 @@ namespace Electronics::Types {
         /// Sets the angle of the servo in degrees
         virtual void SetAngle(int angle) = 0;
 
+        /// Range of rotation in degrees
         virtual double GetRotationRange() = 0;
     };
 }
