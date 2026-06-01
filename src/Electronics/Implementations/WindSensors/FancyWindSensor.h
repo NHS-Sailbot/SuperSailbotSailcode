@@ -5,42 +5,75 @@
 #include "Utilities/Degrees.h"
 
 namespace Electronics::Implementations::WindSensors {
-	class FancyWindSensor final : public Types::WindSensorBase {
-	public:
-		FancyWindSensor(double offset, HardwareSerial& serialPort = Serial3, long buadRate = 115200) {
-			m_Offset = offset;
-			m_SerialPort = &serialPort;
-			m_SerialPort->begin(buadRate);
-		}
+    class FancyWindSensor final : public Types::WindSensorBase {
+    public:
+        static constexpr size_t kMaxLineLength = 1024; // TODO: Check an example output and decrease this number. This is like absolutely way too big.
 
-		void Update() override {
-			int availableBytes = m_SerialPort->available();
-			if (availableBytes) {
-				for (int i = 0; i < availableBytes; i++) {
-					char read = m_SerialPort->read();
-					if (read == '\n') {
-						int first = m_ReadString.indexOf(',');
-						int second = m_ReadString.indexOf(',', first + 1);
-						String subString = m_ReadString.substring(first + 1, second);
-						m_WindDirection = Degrees::Wrap360(subString.toInt() + m_Offset);
+        FancyWindSensor(double offset, HardwareSerial& serialPort = Serial3, long baudRate = 115200) : m_Offset(offset), m_SerialPort(&serialPort) {
+            m_SerialPort->begin(baudRate);
+        }
 
-						Logging::Logger::Log(F("Wind Direction: "), false);
-						Logging::Logger::Log(String(m_WindDirection));
+        void Update() override {
+            while (m_SerialPort->available() > 0) {
+                const char c = static_cast<char>(m_SerialPort->read());
 
-						m_ReadString = "";
-					} else { m_ReadString += read; }
-				}
-			}
-		}
+                if (c == '\r') { continue; }
 
-		double GetDirection() override {
-			return m_WindDirection;
-		}
+                if (c == '\n') {
+                    m_LineBuffer[m_LineLength] = '\0';
+                    int direction = 0;
+                    if (TryParseWindDirection(m_LineBuffer, direction)) {
+                        m_WindDirection = Degrees::Wrap360(static_cast<double>(direction) + m_Offset);
+                    }
+                    ResetLineBuffer();
+                    continue;
+                }
 
-	private:
-		String m_ReadString = "";
-		double m_Offset = 0;
-		double m_WindDirection = 0;
-		HardwareSerial* m_SerialPort;
-	};
+                if (m_LineLength + 1 >= kMaxLineLength) {
+                    ResetLineBuffer();
+                    continue;
+                }
+
+                m_LineBuffer[m_LineLength++] = c;
+            }
+        }
+
+        double GetDirection() override {
+            return m_WindDirection;
+        }
+
+    private:
+        static bool TryParseWindDirection(const char* line, int& outDirection) {
+            const char* firstComma = strchr(line, ',');
+            if (firstComma == nullptr) { return false; }
+
+            const char* secondComma = strchr(firstComma + 1, ',');
+            if (secondComma == nullptr) { return false; }
+
+            const size_t fieldLen = static_cast<size_t>(secondComma - (firstComma + 1));
+            if (fieldLen == 0 || fieldLen >= 16) { return false; }
+
+            char field[16];
+            memcpy(field, firstComma + 1, fieldLen);
+            field[fieldLen] = '\0';
+
+            char* end = nullptr;
+            const long value = strtol(field, &end, 10);
+            if (end == field) { return false; }
+
+            outDirection = static_cast<int>(value);
+            return true;
+        }
+
+        void ResetLineBuffer() {
+            m_LineLength = 0;
+            m_LineBuffer[0] = '\0';
+        }
+
+        char m_LineBuffer[kMaxLineLength] = {};
+        size_t m_LineLength = 0;
+        double m_Offset = 0.0;
+        double m_WindDirection = 0.0;
+        HardwareSerial* m_SerialPort = nullptr;
+    };
 }
