@@ -9,6 +9,7 @@
 using namespace Utilitys;
 
 namespace Logging {
+    // TODO: You're going to want to implement the Arduino Gigas USB support here and make sure that it saves to a file on that USB.
     class Logger {
     public:
         static void Start() {
