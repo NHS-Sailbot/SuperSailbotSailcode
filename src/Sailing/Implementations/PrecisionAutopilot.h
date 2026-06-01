@@ -6,6 +6,7 @@
 #include "Electronics/ElectronicsManager.h"
 #include "Sailing/Types/AutopilotBase.h"
 #include "Utilities/Degrees.h"
+#include "Utilities/Math.h"
 #include "Waypoint/Waypoint.h"
 #include "Waypoint/WaypointManager.h"
 
@@ -47,8 +48,8 @@ namespace Sailing::Implementations {
         TackingState m_CurrentTack = NotInIrons;
 
         void Update() override {
-            int sailAngle = static_cast<int>(Degrees::AngularDistance(180.0, ElectronicsManager::WindSensor->GetDirection()));
-            double desiredSailOut = (int)map(sailAngle, m_InIronsAngle, 180, 0, 100);
+            const double sailAngle = Degrees::AngularDistance(180.0, ElectronicsManager::WindSensor->GetDirection());
+            const double desiredSailOut = Utilitys::Math::RemapClamped(sailAngle, m_InIronsAngle, 180.0, 0.0, 100.0);
             if (m_AllowedSailOutError < abs(ElectronicsManager::WinchServo->GetAngle() - desiredSailOut)) {
                 ElectronicsManager::WinchServo->SetAngle(static_cast<int>(desiredSailOut));
             }
@@ -58,8 +59,8 @@ namespace Sailing::Implementations {
                 double headingError = Degrees::Difference(ElectronicsManager::Magnetometer->GetHeading(), desiredHeading);
 
                 if (m_AllowedHeadingError < abs(headingError)) {
-                    double idealRudderAngle = constrain(headingError, -m_MaxRudderAngle, m_MaxRudderAngle);
-                    double desiredRudderAngle = map(idealRudderAngle, -90, 90, 0, ElectronicsManager::RudderServo->GetRotationRange());
+                    const double idealRudderAngle = constrain(headingError, -m_MaxRudderAngle, m_MaxRudderAngle);
+                    const double desiredRudderAngle = Math::Remap(idealRudderAngle,-m_MaxRudderAngle,m_MaxRudderAngle,0.0, ElectronicsManager::RudderServo->GetRotationRange());
 
                     if (abs(ElectronicsManager::RudderServo->GetAngle() - desiredRudderAngle) > 5) {
                         ElectronicsManager::RudderServo->SetAngle(static_cast<int>(desiredRudderAngle));
