@@ -80,7 +80,7 @@ namespace Sailing::Implementations {
                 Logger::Log(F("Reached waypoint: "), false);
                 Logger::Log(String(m_TargetWaypointIndex));
                 m_TargetWaypointIndex++;
-                if (m_TargetWaypointIndex >= WaypointManager::waypoints.size()) {
+                if (static_cast<size_t>(m_TargetWaypointIndex) >= WaypointManager::waypoints.size()) {
                     Logger::Log(F("End of waypoints reached, resetting to first waypoint."));
                     m_TargetWaypointIndex = 0;
                 }
