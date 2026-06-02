@@ -26,10 +26,10 @@ namespace Electronics {
         Wire.begin();
         Wire.setClock(400000);
 
-        WinchServo = new Winches::ServoWinch(9, 3600, 1440, 2160);
+        WinchServo = new Winches::ServoWinch(*new Servos::ArduinoServo(9, 3600), 1440, 2160);
         MinLimitSwitchWinch = new InterruptLimitSwitchWithCallbacks(2);
         MaxLimitSwitchWinch = new InterruptLimitSwitchWithCallbacks(3);
-        JibWinchServo = new Winches::ServoWinch(11, 720, 720, 0);
+        JibWinchServo = new Winches::ServoWinch(*new Servos::ArduinoServo(11, 720), 720, 0);
         RudderServo = new Servos::ArduinoServo(10, 180);
 
         Gps = new Gps::UbloxGpsI2c(Wire1, 0x42);
