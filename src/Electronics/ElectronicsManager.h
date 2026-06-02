@@ -15,7 +15,7 @@ namespace Electronics {
         inline static Types::WinchBase *WinchServo = nullptr;
         inline static Types::LimitSwitchBase *MinLimitSwitchWinch = nullptr;
         inline static Types::LimitSwitchBase *MaxLimitSwitchWinch = nullptr;
-        inline static Types::ServoBase *JibWinchServo = nullptr;
+        inline static Types::WinchBase *JibWinchServo = nullptr;
         inline static Types::ServoBase *RudderServo = nullptr;
         inline static Types::GpsBase *Gps = nullptr;
         inline static Types::WindSensorBase *WindSensor = nullptr;

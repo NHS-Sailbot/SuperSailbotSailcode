@@ -29,7 +29,7 @@ namespace Electronics {
         WinchServo = new Winches::ServoWinch(9, 3600, 1440, 2160);
         MinLimitSwitchWinch = new InterruptLimitSwitchWithCallbacks(2);
         MaxLimitSwitchWinch = new InterruptLimitSwitchWithCallbacks(3);
-        JibWinchServo = new Servos::ArduinoServo(11, 720); //Double check THIS
+        JibWinchServo = new Winches::ServoWinch(11, 720, 720, 0);
         RudderServo = new Servos::ArduinoServo(10, 180);
 
         Gps = new Gps::UbloxGpsI2c(Wire1, 0x42);
