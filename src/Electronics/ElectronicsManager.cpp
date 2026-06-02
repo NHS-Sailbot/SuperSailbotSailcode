@@ -53,7 +53,7 @@ namespace Electronics {
                 .declination = 14.84,
 
                 .facingVector = {1.0f, 0.0f, 0.0f}
-            }, Wire, 0x68);
+            }, Wire1, 0x68);
 
         WindSensor = new WindSensors::FancyWindSensor(0.0, Serial3, 115200);
 
