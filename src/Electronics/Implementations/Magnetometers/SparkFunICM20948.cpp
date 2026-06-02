@@ -24,6 +24,9 @@ Magnetometers::SparkFunICM20948::SparkFunICM20948(TiltCompensatedCompassSettings
 void Magnetometers::SparkFunICM20948::Update() {
     if (m_SparkFunICM20948.dataReady()) { m_SparkFunICM20948.getAGMT(); }
 
+
+    m_SparkFunICM20948.enableDebugging();
+
     if (m_SparkFunICM20948.status != ICM_20948_Stat_Ok) {
         Logger::Log(F("Error reading magnetometer"));
         m_Calibration = NotCalibrated;
