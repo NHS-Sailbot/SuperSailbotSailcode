@@ -57,6 +57,22 @@ namespace Sailing::Implementations {
                 ElectronicsManager::WinchServo->SetLetOutPercentage(desiredSailOut);
             }
 
+            // desired percentage of the jibby
+            const double desiredJibOutPercent = Math::RemapClamped(sailAngle, m_InIronsAngle, 180.0, 0.0, 100.0);
+
+            // mapping to 720, with the math remap clamp because it looks fancy and is prolly better because chris used it
+            // 0% = 0 degrees and 100% = 720 degrees
+            const double desiredJibAngle = Math::RemapClamped(desiredJibOutPercent, 0.0, 100.0, 0.0, 720.0);
+
+            // read jib servo angle and go back to percent for the next line
+            double currentJibAngle = ElectronicsManager::JibWinchServo->GetAngle();
+            double currentJibPercent = Math::RemapClamped(currentJibAngle, 0.0, 720.0, 0.0, 100.0);
+
+            // using chris's error so the servo doesnt tweak out
+            if (m_AllowedSailOutError < abs(currentJibPercent - desiredJibOutPercent)) {
+                ElectronicsManager::JibWinchServo->SetAngle(static_cast<int>(desiredJibAngle)); // turning into int so intellisense doesnt get angry (im sorry - lucas I the tech guy)
+            }
+
             double desiredHeading = DesiredHeading();
             if (desiredHeading != -1) {
                 double headingError = Degrees::Difference(ElectronicsManager::Magnetometer->GetHeading(), desiredHeading);
