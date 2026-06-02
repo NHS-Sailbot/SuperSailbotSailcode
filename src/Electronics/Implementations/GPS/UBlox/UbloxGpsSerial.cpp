@@ -6,7 +6,7 @@
 using namespace Logging;
 
 namespace Electronics::Implementations::Gps {
-    UbloxGpsSerial::UbloxGpsSerial(HardwareSerial& serialPort = Serial1) {
+    UbloxGpsSerial::UbloxGpsSerial(HardwareSerial& serialPort) {
         Logger::Log(F("Initializing Ublox GPS on Serial..."));
 
         if (m_UbloxGnss.begin(serialPort) == false){

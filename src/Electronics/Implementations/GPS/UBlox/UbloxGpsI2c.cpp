@@ -6,7 +6,7 @@
 using namespace Logging;
 
 namespace Electronics::Implementations::Gps {
-    UbloxGpsI2c::UbloxGpsI2c(MbedI2C& i2cWire = Wire, uint8_t address = 0x42) {
+    UbloxGpsI2c::UbloxGpsI2c(MbedI2C& i2cWire, uint8_t address) {
         Logger::Log(F("Initializing Ublox GPS on I2C..."));
 
         if (m_UbloxGnss.begin(i2cWire, address) == false) {
