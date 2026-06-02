@@ -1,5 +1,5 @@
 // TODO: This needs to be entirely reviewed and made sure there are no bugs in its implementation. That's very unlikely. It was never tested. Tragically. I hold the grudge.
-
+// Also change upper jib bound from 720 to something we measure on how far we want it to move.
 
 // Created by sailbot on 6/10/25.
 
@@ -62,11 +62,11 @@ namespace Sailing::Implementations {
 
             // mapping to 720, with the math remap clamp because it looks fancy and is prolly better because chris used it
             // 0% = 0 degrees and 100% = 720 degrees
-            const double desiredJibAngle = Math::RemapClamped(desiredJibOutPercent, 0.0, 100.0, 0.0, 720.0);
+            const double desiredJibAngle = Math::RemapClamped(desiredJibOutPercent, 0.0, 100.0, 0.0, 720.0); // Adjust the upper bounds of the jib thing depending on (physically) how much we ant it to move until
 
             // read jib servo angle and go back to percent for the next line
             double currentJibAngle = ElectronicsManager::JibWinchServo->GetAngle();
-            double currentJibPercent = Math::RemapClamped(currentJibAngle, 0.0, 720.0, 0.0, 100.0);
+            double currentJibPercent = Math::RemapClamped(currentJibAngle, 0.0, 720.0, 0.0, 100.0); //Make the same change as above to the upper bound. Will probably make this a variable.
 
             // using chris's error so the servo doesnt tweak out
             if (m_AllowedSailOutError < abs(currentJibPercent - desiredJibOutPercent)) {
