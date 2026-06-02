@@ -32,8 +32,8 @@ The project is structured as follows:
 # Wiring the Arduino
 As of 4/6/2026,
 Pins:
-- SparkfunICM20948 Magnetometer: 'Wire'
-- GPS: 'Wire1'
+- SparkfunICM20948 Magnetometer: 'Wire1' at address "0x68"
+- GPS: 'Wire1' at address '0x42'
 - These ones are in the Electronics Manager:
 - WinchServo = new Winches::WinchServo: 'pin 9'
 - MinLimitSwitchWinch = new InterruptLimitSwitchWithCallbacks: 'pin 2'
