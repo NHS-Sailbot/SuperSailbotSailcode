@@ -7,9 +7,9 @@
 #include "Electronics/Implementations/Servos/ArduinoServo.h"
 
 namespace Electronics::Implementations::Winches {
-    class MainWinch final : public Types::WinchBase {
+    class ServoWinch final : public Types::WinchBase {
     public:
-        MainWinch(uint8_t pin, int rotationRange, int fullOutAngle, int fullInAngle)
+        ServoWinch(uint8_t pin, int rotationRange, int fullOutAngle, int fullInAngle)
             : m_Servo(pin, rotationRange),
               m_FullOutAngle(fullOutAngle),
               m_FullInAngle(fullInAngle) {}
