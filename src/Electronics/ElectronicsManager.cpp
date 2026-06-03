@@ -10,7 +10,7 @@
 #include "Logging/Logger.h"
 #include <ArduinoJson.h>
 
-#include "Implementations/Winches/MainWinch.h"
+#include "Implementations/Winches/ServoWinch.h"
 #include "Implementations/WindSensors/FancyWindSensor.h"
 
 using namespace Electronics::Implementations;
@@ -22,14 +22,11 @@ namespace Electronics {
 
         Wire1.begin();
         Wire1.setClock(400000);
-        
-        Wire.begin();
-        Wire.setClock(400000);
 
-        WinchServo = new Winches::MainWinch(9, 3600, 1440, 2160);
+        WinchServo = new Winches::ServoWinch(*new Servos::ArduinoServo(9, 3600), 1440, 2160);
         MinLimitSwitchWinch = new InterruptLimitSwitchWithCallbacks(2);
         MaxLimitSwitchWinch = new InterruptLimitSwitchWithCallbacks(3);
-        JibWinchServo = new Servos::ArduinoServo(11, 720); //Double check THIS
+        JibWinchServo = new Winches::ServoWinch(*new Servos::ArduinoServo(11, 720), 720, 0); // Double check THIS
         RudderServo = new Servos::ArduinoServo(10, 180);
 
         Gps = new Gps::UbloxGpsI2c(Wire1, 0x42);

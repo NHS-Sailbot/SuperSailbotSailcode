@@ -3,14 +3,14 @@
 #pragma once
 
 #include <Arduino.h>
+#include "Electronics/Types/Servo/ServoBase.h"
 #include "Electronics/Types/Winch/WinchBase.h"
-#include "Electronics/Implementations/Servos/ArduinoServo.h"
 
 namespace Electronics::Implementations::Winches {
-    class MainWinch final : public Types::WinchBase {
+    class ServoWinch final : public Types::WinchBase {
     public:
-        MainWinch(uint8_t pin, int rotationRange, int fullOutAngle, int fullInAngle)
-            : m_Servo(pin, rotationRange),
+        ServoWinch(Types::ServoBase& servo, int fullOutAngle, int fullInAngle)
+            : m_Servo(servo),
               m_FullOutAngle(fullOutAngle),
               m_FullInAngle(fullInAngle) {}
 
@@ -25,7 +25,7 @@ namespace Electronics::Implementations::Winches {
         }
 
     private:
-        Servos::ArduinoServo m_Servo;
+        Types::ServoBase& m_Servo;
         int m_FullOutAngle;
         int m_FullInAngle;
         double m_LetOutPercentage = 0.0;
