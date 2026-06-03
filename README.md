@@ -40,7 +40,7 @@ Pins:
 - MaxLimitSwitchWinch = new InterruptLimitSwitchWithCallbacks: 'pin 3'
 - JibWinchServo = new Servos::ArduinoServo: 'pin 11'
 - RudderServo = new Servos::ArduinoServo: 'pin 10'
-- WindSensor = new WindSensors::FancyWindSensor: 'Serial3, 115200 baud'
+- WindSensor = new WindSensors::FancyWindSensor: 'Serial3, 38400 baud'
 # Make sure your pins are right, dumbass
 Especially you, Lucas.
 
