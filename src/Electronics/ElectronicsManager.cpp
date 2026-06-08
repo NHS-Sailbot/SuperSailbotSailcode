@@ -79,6 +79,15 @@ namespace Electronics {
         doc["gps"]["longitude"] = Gps->GetLongitude();
         doc["gps"]["speed"] = Gps->GetSpeed();
         doc["gps"]["heading"] = Gps->GetHeading();
+        doc["gps"]["timeValid"] = Gps->IsTimeValid();
+        doc["gps"]["dateValid"] = Gps->IsDateValid();
+        doc["gps"]["year"] = Gps->GetYear();
+        doc["gps"]["month"] = Gps->GetMonth();
+        doc["gps"]["day"] = Gps->GetDay();
+        doc["gps"]["hour"] = Gps->GetHour();
+        doc["gps"]["minute"] = Gps->GetMinute();
+        doc["gps"]["second"] = Gps->GetSecond();
+        doc["gps"]["millisecond"] = Gps->GetMillisecond();
         doc["magnetometer"]["heading"] = Magnetometer->GetHeading();
         doc["windSensor"]["direction"] = WindSensor->GetDirection();
 
