@@ -25,6 +25,22 @@ void UbloxGpsBase::Update() {
         m_Fix = Fix;
     }
 
+    m_TimeValid = m_UbloxGnss.getTimeValid();
+    m_DateValid = m_UbloxGnss.getDateValid();
+
+    if (m_TimeValid) {
+        m_Hour = m_UbloxGnss.getHour();
+        m_Minute = m_UbloxGnss.getMinute();
+        m_Second = m_UbloxGnss.getSecond();
+        m_Millisecond = m_UbloxGnss.getMillisecond();
+    }
+
+    if (m_DateValid) {
+        m_Year = m_UbloxGnss.getYear();
+        m_Month = m_UbloxGnss.getMonth();
+        m_Day = m_UbloxGnss.getDay();
+    }
+
     if (m_Fix == NoFix) {
         return;
     }
@@ -69,4 +85,39 @@ double UbloxGpsBase::GetHeading() {
     return m_Heading;
 }
 
+bool UbloxGpsBase::IsTimeValid() {
+    return m_TimeValid;
+}
+
+bool UbloxGpsBase::IsDateValid() {
+    return m_DateValid;
+}
+
+uint16_t UbloxGpsBase::GetYear() {
+    return m_Year;
+}
+
+uint8_t UbloxGpsBase::GetMonth() {
+    return m_Month;
+}
+
+uint8_t UbloxGpsBase::GetDay() {
+    return m_Day;
+}
+
+uint8_t UbloxGpsBase::GetHour() {
+    return m_Hour;
+}
+
+uint8_t UbloxGpsBase::GetMinute() {
+    return m_Minute;
+}
+
+uint8_t UbloxGpsBase::GetSecond() {
+    return m_Second;
+}
+
+uint16_t UbloxGpsBase::GetMillisecond() {
+    return m_Millisecond;
+}
 
