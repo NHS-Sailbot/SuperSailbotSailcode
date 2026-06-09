@@ -2,7 +2,7 @@
 
 #include <Arduino.h>
 
-namespace Electronics::Types {
+namespace Utilitys {
     struct UtcTime {
         uint16_t year = 0;
         uint8_t month = 0;
