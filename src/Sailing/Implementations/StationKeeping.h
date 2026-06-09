@@ -1,7 +1,6 @@
-// TODO: This needs to be entirely reviewed and made sure there are no bugs in its implementation. That's very unlikely. It was never tested. Tragically. I hold the grudge.
-// Also change upper jib bound from 720 to something we measure on how far we want it to move.
-
-// Created by sailbot on 6/10/25.
+//
+// Created by lukaz on 6/9/2026.
+//
 
 #pragma once
 
@@ -12,22 +11,30 @@
 #include "Utilities/Math.h"
 #include "Waypoint/Waypoint.h"
 #include "Waypoint/WaypointManager.h"
-#include "StationKeeping.h"
+#include "enums.h"
 
 using namespace Electronics;
 using namespace Waypoints;
 using namespace Logging;
 
 namespace Sailing::Implementations {
-    /*enum TackingState {
-            NotInIrons = -1,
-            StarboardTack = 0,
-            PortTack = 1,
-        };*/
+    enum TackingState {
+        NotInIrons = -1,
+        StarboardTack = 0,
+        PortTack = 1,
+    };
 
-    class PrecisionAutopilot : public Types::AutopilotBase {
+    class StationKeeping : public Types::AutopilotBase {
+
+    // class members
+    bool m_ReturnHome = false;
+
+    unsigned long m_HoldStart = 0;      // when we first reached waypoint 0
+    unsigned long m_HoldDuration = 0;   // how long to stay (ms)
+    bool m_HoldTimerActive = false;     // prevents restarting the timer every loop
+
     public:
-        PrecisionAutopilot(double inIronsAngle = 45.0, double distanceToChangeTack = 10.0, double allowedHeadingError = 5.0, double allowedSailOutError = 1.0, double maxRudderAngle = 45.0) {
+        StationKeeping(double inIronsAngle = 45.0, double distanceToChangeTack = 10.0, double allowedHeadingError = 5.0, double allowedSailOutError = 1.0, double maxRudderAngle = 45.0) {
             m_InIronsAngle = inIronsAngle;
             m_DistanceToChangeTack = distanceToChangeTack;
             m_AllowedHeadingError = allowedHeadingError;
@@ -51,7 +58,27 @@ namespace Sailing::Implementations {
         int m_TargetWaypointIndex = 0;
         TackingState m_CurrentTack = NotInIrons;
 
+        void HoldAtWaypoint0ForMinutes(unsigned int minutes) {
+            m_HoldDuration = (unsigned long)minutes * 60000UL;
+            m_HoldStart = 0;
+            m_HoldTimerActive = false;
+            m_ReturnHome = false;
+        }
+
+
         void Update() override {
+
+            if (m_HoldTimerActive && !m_ReturnHome) {
+                unsigned long now = millis();
+
+                if (now - m_HoldStart >= m_HoldDuration) {
+                    m_ReturnHome = true;        // <-- SWITCHES AFTER 5 MINUTES
+                    m_HoldTimerActive = false;  // stop the timer
+                    Logger::Log(F("Hold duration complete — switching to home waypoint"));
+                }
+            }
+
+
             const double sailAngle = Degrees::AngularDistance(180.0, ElectronicsManager::WindSensor->GetDirection());
             const double desiredSailOut = Math::RemapClamped(sailAngle, m_InIronsAngle, 180.0, 0.0, 100.0);
             if (m_AllowedSailOutError < abs(ElectronicsManager::WinchServo->GetLetOutPercentage() - desiredSailOut)) {
@@ -78,16 +105,29 @@ namespace Sailing::Implementations {
             }
 
             if (WaypointManager::waypoints[m_TargetWaypointIndex].pointIsInRadius(ElectronicsManager::Gps->GetPosition())) {
+
                 Logger::Log(F("Reached waypoint: "), false);
                 Logger::Log(String(m_TargetWaypointIndex));
-                m_TargetWaypointIndex++;
-                if (static_cast<size_t>(m_TargetWaypointIndex) >= WaypointManager::waypoints.size()) {
-                    Logger::Log(F("End of waypoints reached, resetting to first waypoint."));
+
+                // If we reached waypoint 0 and haven't started the timer yet
+                if (m_TargetWaypointIndex == 0 && !m_HoldTimerActive) {
+                    m_HoldStart = millis();
+                    m_HoldTimerActive = true;
+                    Logger::Log(F("Hold timer started at waypoint 0"));
+                }
+
+                // If we are not returning home yet, stay on waypoint 0
+                if (!m_ReturnHome) {
                     m_TargetWaypointIndex = 0;
+                    Logger::Log(F("Holding at waypoint 0"));
+                } else {
+                    // Return home (waypoint 1)
+                    m_TargetWaypointIndex = 1;
+                    Logger::Log(F("Returning home (waypoint 1)"));
                 }
             }
-        }
 
+        }
         double DesiredHeading() {
             double waypointCourse = Waypoint::courseTo(ElectronicsManager::Gps->GetPosition(), WaypointManager::waypoints[m_TargetWaypointIndex].m_Position);
             double relativeWindDirection = GetRelativeWindDirection(waypointCourse);

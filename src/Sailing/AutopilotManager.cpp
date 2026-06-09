@@ -3,17 +3,27 @@
 #include "AutopilotManager.h"
 
 #include "Implementations/PrecisionAutopilot.h"
+#include "Implementations/StationKeeping.h"
 
 namespace Sailing {
     // TODO: Utilize the API to dynamically set the autopilot used on startup.
     void AutopilotManager::Start() {
-        m_Autopilot = new Implementations::PrecisionAutopilot (
+        m_Autopilot = new Implementations::StationKeeping (
             45.0, // inIronsAngle
             15.0, // distanceToChangeTack
             5.0,  // allowedHeadingError
             1.0,  // allowedSailOutError
             45.0  // maxRudderAngle
         );
+        static_cast<Implementations::StationKeeping*>(m_Autopilot)->HoldAtWaypoint0ForMinutes(5);
+        /*
+        m_Autopilot = new Implementations::PrecisionAutopilot (
+            45.0, // inIronsAngle
+            15.0, // distanceToChangeTack
+            5.0,  // allowedHeadingError
+            1.0,  // allowedSailOutError
+            45.0  // maxRudderAngle
+        ); */
     }
 
     void AutopilotManager::Update() {
