@@ -27,14 +27,14 @@ namespace Electronics::Implementations::Timekeeping {
             }
 
             if (m_HasGpsAnchor) {
-                const Types::UtcTime now = GetCurrentUtc();
+                const Utilitys::UtcTime now = GetCurrentUtc();
 
                 for (auto& entry : m_TimeCallbacks) {
                     if (!entry.active) {
                         continue;
                     }
 
-                    if (Types::CompareUtc(now, entry.target) >= 0) {
+                    if (Utilitys::CompareUtc(now, entry.target) >= 0) {
                         entry.callback();
                         ClearTimeEntry(entry);
                     }
@@ -46,12 +46,12 @@ namespace Electronics::Implementations::Timekeeping {
             return m_HasGpsAnchor;
         }
 
-        Types::UtcTime GetCurrentUtc() const override {
+        Utilitys::UtcTime GetCurrentUtc() const override {
             if (!m_HasGpsAnchor) {
                 return {};
             }
 
-            return Types::AddMilliseconds(m_GpsAnchorUtc, millis() - m_GpsAnchorMillis);
+            return Utilitys::AddMilliseconds(m_GpsAnchorUtc, millis() - m_GpsAnchorMillis);
         }
 
         /// Cannot exceed Constants::MAX_DELAY_CALLBACKS active callbacks; returns -1 when full.
@@ -72,7 +72,7 @@ namespace Electronics::Implementations::Timekeeping {
         }
 
         /// Cannot exceed Constants::MAX_TIME_CALLBACKS active callbacks; returns -1 when full.
-        int RegisterTimeCallback(const std::function<void()>& callback, const Types::UtcTime target) override {
+        int RegisterTimeCallback(const std::function<void()>& callback, const Utilitys::UtcTime target) override {
             for (auto& entry : m_TimeCallbacks) {
                 if (entry.active) {
                     continue;
@@ -118,7 +118,7 @@ namespace Electronics::Implementations::Timekeeping {
             bool active = false;
             int id = -1;
             std::function<void()> callback;
-            Types::UtcTime target;
+            Utilitys::UtcTime target;
         };
 
         static void ClearDelayEntry(DelayEntry& entry) {
@@ -135,7 +135,7 @@ namespace Electronics::Implementations::Timekeeping {
             entry.target = {};
         }
 
-        Types::UtcTime GetUtcFromGps() const {
+        Utilitys::UtcTime GetUtcFromGps() const {
             return {
                 m_Gps->GetYear(),
                 m_Gps->GetMonth(),
@@ -162,7 +162,7 @@ namespace Electronics::Implementations::Timekeeping {
         DelayEntry m_DelayCallbacks[Constants::MAX_DELAY_CALLBACKS] = {};
         TimeEntry m_TimeCallbacks[Constants::MAX_TIME_CALLBACKS] = {};
 
-        Types::UtcTime m_GpsAnchorUtc;
+        Utilitys::UtcTime m_GpsAnchorUtc;
         unsigned long m_GpsAnchorMillis = 0;
         bool m_HasGpsAnchor = false;
     };
