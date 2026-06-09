@@ -7,6 +7,7 @@
 #include "Types/Magnetometer/MagnetometerBase.h"
 #include "Types/Servo/ServoBase.h"
 #include "Types/Winch/WinchBase.h"
+#include "Types/Timekeeping/TimekeepingBase.h"
 #include "Types/WindSensor/WindSensorBase.h"
 
 namespace Electronics {
@@ -20,6 +21,7 @@ namespace Electronics {
         inline static Types::GpsBase *Gps = nullptr;
         inline static Types::WindSensorBase *WindSensor = nullptr;
         inline static Types::MagnetometerBase *Magnetometer = nullptr;
+        inline static Types::TimekeepingBase *Timekeeping = nullptr;
 
         /// Initializes all electronics
         static void Start();
@@ -29,5 +31,6 @@ namespace Electronics {
 
     private:
         static void SendTelemetry();
+        static void ScheduleTelemetry();
     };
 }

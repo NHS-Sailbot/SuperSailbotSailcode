@@ -3,6 +3,7 @@
 #include "ElectronicsManager.h"
 
 #include <Wire.h>
+#include "Implementations/Timekeeping/GpsTimekeeping.h"
 #include "Implementations/GPS/UBlox/UbloxGpsI2c.h"
 #include "Implementations/LimitSwitches/InterruptLimitSwitchWithCallbacks.h"
 #include "Implementations/Magnetometers/SparkFunICM20948.h"
@@ -53,6 +54,8 @@ namespace Electronics {
 
         WindSensor = new WindSensors::FancyWindSensor(0.0, Serial3, 38400);
 
+        Timekeeping = new Timekeeping::GpsTimekeeping(Gps);
+        Timekeeping->RegisterDelayCallback(ScheduleTelemetry, 500);
 
         Logger::Log(F("Electronics started!"));
     }
@@ -61,12 +64,12 @@ namespace Electronics {
         Gps->Update();
         Magnetometer->Update();
         WindSensor->Update();
+        Timekeeping->Update();
+    }
 
-        static unsigned long lastTelemetry = 0;
-        if (millis() - lastTelemetry >= 500) {
-            lastTelemetry = millis();
-            SendTelemetry();
-        }
+    void ElectronicsManager::ScheduleTelemetry() {
+        SendTelemetry();
+        Timekeeping->RegisterDelayCallback(ScheduleTelemetry, 500);
     }
 
     void ElectronicsManager::SendTelemetry() {
