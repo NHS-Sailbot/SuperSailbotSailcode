@@ -1,9 +1,9 @@
 #pragma once
 
 #include <Arduino.h>
+#include "Constants.h"
 #include "Electronics/Types/Gps/GpsBase.h"
 #include "Electronics/Types/Timekeeping/TimekeepingBase.h"
-#include <vector>
 
 namespace Electronics::Implementations::Timekeeping {
     class GpsTimekeeping final : public Types::TimekeepingBase {
@@ -15,24 +15,28 @@ namespace Electronics::Implementations::Timekeeping {
 
             const unsigned long nowMs = millis();
 
-            for (auto it = m_DelayCallbacks.begin(); it != m_DelayCallbacks.end(); ) {
-                if (static_cast<long>(nowMs - it->fireAtMs) >= 0) {
-                    it->callback();
-                    it = m_DelayCallbacks.erase(it);
-                } else {
-                    ++it;
+            for (auto& entry : m_DelayCallbacks) {
+                if (!entry.active) {
+                    continue;
+                }
+
+                if (static_cast<long>(nowMs - entry.fireAtMs) >= 0) {
+                    entry.callback();
+                    ClearDelayEntry(entry);
                 }
             }
 
             if (m_HasGpsAnchor) {
                 const Types::UtcTime now = GetCurrentUtc();
 
-                for (auto it = m_TimeCallbacks.begin(); it != m_TimeCallbacks.end(); ) {
-                    if (Types::CompareUtc(now, it->target) >= 0) {
-                        it->callback();
-                        it = m_TimeCallbacks.erase(it);
-                    } else {
-                        ++it;
+                for (auto& entry : m_TimeCallbacks) {
+                    if (!entry.active) {
+                        continue;
+                    }
+
+                    if (Types::CompareUtc(now, entry.target) >= 0) {
+                        entry.callback();
+                        ClearTimeEntry(entry);
                     }
                 }
             }
@@ -50,29 +54,51 @@ namespace Electronics::Implementations::Timekeeping {
             return Types::AddMilliseconds(m_GpsAnchorUtc, millis() - m_GpsAnchorMillis);
         }
 
+        /// Cannot exceed Constants::MAX_DELAY_CALLBACKS active callbacks; returns -1 when full.
         int RegisterDelayCallback(const std::function<void()>& callback, const unsigned long delayMs) override {
-            const int id = m_NextId++;
-            m_DelayCallbacks.push_back({ id, callback, millis() + delayMs });
-            return id;
+            for (auto& entry : m_DelayCallbacks) {
+                if (entry.active) {
+                    continue;
+                }
+
+                entry.active = true;
+                entry.id = m_NextId++;
+                entry.callback = callback;
+                entry.fireAtMs = millis() + delayMs;
+                return entry.id;
+            }
+
+            return -1;
         }
 
+        /// Cannot exceed Constants::MAX_TIME_CALLBACKS active callbacks; returns -1 when full.
         int RegisterTimeCallback(const std::function<void()>& callback, const Types::UtcTime target) override {
-            const int id = m_NextId++;
-            m_TimeCallbacks.push_back({ id, callback, target });
-            return id;
+            for (auto& entry : m_TimeCallbacks) {
+                if (entry.active) {
+                    continue;
+                }
+
+                entry.active = true;
+                entry.id = m_NextId++;
+                entry.callback = callback;
+                entry.target = target;
+                return entry.id;
+            }
+
+            return -1;
         }
 
         bool DeregisterCallback(const int id) override {
-            for (auto it = m_DelayCallbacks.begin(); it != m_DelayCallbacks.end(); ++it) {
-                if (it->id == id) {
-                    m_DelayCallbacks.erase(it);
+            for (auto& entry : m_DelayCallbacks) {
+                if (entry.active && entry.id == id) {
+                    ClearDelayEntry(entry);
                     return true;
                 }
             }
 
-            for (auto it = m_TimeCallbacks.begin(); it != m_TimeCallbacks.end(); ++it) {
-                if (it->id == id) {
-                    m_TimeCallbacks.erase(it);
+            for (auto& entry : m_TimeCallbacks) {
+                if (entry.active && entry.id == id) {
+                    ClearTimeEntry(entry);
                     return true;
                 }
             }
@@ -82,16 +108,32 @@ namespace Electronics::Implementations::Timekeeping {
 
     private:
         struct DelayEntry {
-            int id;
+            bool active = false;
+            int id = -1;
             std::function<void()> callback;
-            unsigned long fireAtMs;
+            unsigned long fireAtMs = 0;
         };
 
         struct TimeEntry {
-            int id;
+            bool active = false;
+            int id = -1;
             std::function<void()> callback;
             Types::UtcTime target;
         };
+
+        static void ClearDelayEntry(DelayEntry& entry) {
+            entry.active = false;
+            entry.id = -1;
+            entry.callback = nullptr;
+            entry.fireAtMs = 0;
+        }
+
+        static void ClearTimeEntry(TimeEntry& entry) {
+            entry.active = false;
+            entry.id = -1;
+            entry.callback = nullptr;
+            entry.target = {};
+        }
 
         Types::UtcTime GetUtcFromGps() const {
             return {
@@ -117,8 +159,8 @@ namespace Electronics::Implementations::Timekeeping {
 
         Types::GpsBase* m_Gps;
         int m_NextId = 0;
-        std::vector<DelayEntry> m_DelayCallbacks;
-        std::vector<TimeEntry> m_TimeCallbacks;
+        DelayEntry m_DelayCallbacks[Constants::MAX_DELAY_CALLBACKS] = {};
+        TimeEntry m_TimeCallbacks[Constants::MAX_TIME_CALLBACKS] = {};
 
         Types::UtcTime m_GpsAnchorUtc;
         unsigned long m_GpsAnchorMillis = 0;

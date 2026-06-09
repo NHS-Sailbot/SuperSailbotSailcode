@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "Constants.h"
 #include "Electronics/Types/LimitSwitch/LimitSwitchBase.h"
 #include "Logging/Logger.h"
 
@@ -14,19 +15,42 @@ namespace Electronics::Implementations {
 
         // There not a good way to compare callbacks, so we use an index to identify them
         // it's not like we even need to ever deregister them, but we can if we want to
+        // Cannot exceed Constants::MAX_LIMIT_SWITCH_CALLBACKS active callbacks; returns -1 when full.
         int RegisterCallback(const std::function<void()>& callback) {
-            callbacks.push_back(callback);
-            return static_cast<int>(callbacks.size() - 1); // Return the index of the callback
+            for (size_t i = 0; i < Constants::MAX_LIMIT_SWITCH_CALLBACKS; ++i) {
+                if (m_Callbacks[i].active) {
+                    continue;
+                }
+
+                m_Callbacks[i].active = true;
+                m_Callbacks[i].callback = callback;
+                return static_cast<int>(i);
+            }
+
+            return -1;
         }
 
-        bool DeregisterCallback(int index) {
-            if (index < 0 || index >= static_cast<int>(callbacks.size())) {
+        bool DeregisterCallback(const int index) {
+            if (index < 0 || index >= static_cast<int>(Constants::MAX_LIMIT_SWITCH_CALLBACKS)) {
                 return false;
             }
-            callbacks.erase(callbacks.begin() + index); // Remove the callback at the specified index
+
+            CallbackEntry& entry = m_Callbacks[index];
+            if (!entry.active) {
+                return false;
+            }
+
+            entry.active = false;
+            entry.callback = nullptr;
             return true;
         }
+
     private:
-        std::vector<std::function<void()>> callbacks;
+        struct CallbackEntry {
+            bool active = false;
+            std::function<void()> callback;
+        };
+
+        CallbackEntry m_Callbacks[Constants::MAX_LIMIT_SWITCH_CALLBACKS] = {};
     };
 }
