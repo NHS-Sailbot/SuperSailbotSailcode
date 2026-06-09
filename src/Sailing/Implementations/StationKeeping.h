@@ -60,16 +60,15 @@ namespace Sailing::Implementations {
 
         void HoldAtWaypoint0ForMinutes(unsigned int minutes) {
             m_HoldDuration = (unsigned long)minutes * 60000UL;
-            m_HoldStart = 0;
+            m_HoldStart = ElectronicsManager::Timekeeping->GetCurrentUtc().millisecond;
             m_HoldTimerActive = false;
             m_ReturnHome = false;
         }
 
 
         void Update() override {
-
             if (m_HoldTimerActive && !m_ReturnHome) {
-                unsigned long now = millis();
+                unsigned long now = ElectronicsManager::Timekeeping->GetCurrentUtc().millisecond;
 
                 if (now - m_HoldStart >= m_HoldDuration) {
                     m_ReturnHome = true;        // <-- SWITCHES AFTER 5 MINUTES
@@ -111,7 +110,7 @@ namespace Sailing::Implementations {
 
                 // If we reached waypoint 0 and haven't started the timer yet
                 if (m_TargetWaypointIndex == 0 && !m_HoldTimerActive) {
-                    m_HoldStart = millis();
+                    m_HoldStart = ElectronicsManager::Timekeeping->GetCurrentUtc().millisecond;
                     m_HoldTimerActive = true;
                     Logger::Log(F("Hold timer started at waypoint 0"));
                 }
