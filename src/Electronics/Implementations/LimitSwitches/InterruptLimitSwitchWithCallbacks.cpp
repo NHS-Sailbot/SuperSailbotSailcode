@@ -12,6 +12,10 @@ namespace Electronics::Implementations {
     }
 
     void InterruptLimitSwitchWithCallbacks::LimitHit() {
-        for (auto& callback : callbacks) { callback(); }
+        for (auto& entry : m_Callbacks) {
+            if (entry.active) {
+                entry.callback();
+            }
+        }
     }
 }
