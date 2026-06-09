@@ -15,7 +15,7 @@ namespace Sailing {
             1.0,  // allowedSailOutError
             45.0  // maxRudderAngle
         );
-        static_cast<Implementations::StationKeeping*>(m_Autopilot)->HoldAtWaypoint0ForMinutes(5);
+        static_cast<Implementations::StationKeeping*>(m_Autopilot)->HoldAtWaypoint0ForMinutes(4);
         /*
         m_Autopilot = new Implementations::PrecisionAutopilot (
             45.0, // inIronsAngle

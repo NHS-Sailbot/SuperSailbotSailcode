@@ -59,8 +59,11 @@ namespace Sailing::Implementations {
         TackingState m_CurrentTack = NotInIrons;
 
         void HoldAtWaypoint0ForMinutes(unsigned int minutes) {
-            m_HoldDuration = (unsigned long)minutes * 60000UL;
-            m_HoldStart = ElectronicsManager::Timekeeping->GetCurrentUtc().millisecond;
+            m_HoldDuration = minutes;
+            m_HoldStart = ElectronicsManager::Timekeeping->GetCurrentUtc().minute;
+            if (m_HoldStart >= 55) {
+                // Do something to make the minute number negative because if the time returns something like 58 but then 4 minutes later is 02, the script will shit itself.
+            }
             m_HoldTimerActive = false;
             m_ReturnHome = false;
         }
@@ -68,7 +71,7 @@ namespace Sailing::Implementations {
 
         void Update() override {
             if (m_HoldTimerActive && !m_ReturnHome) {
-                unsigned long now = ElectronicsManager::Timekeeping->GetCurrentUtc().millisecond;
+                unsigned long now = ElectronicsManager::Timekeeping->GetCurrentUtc().minute;
 
                 if (now - m_HoldStart >= m_HoldDuration) {
                     m_ReturnHome = true;        // <-- SWITCHES AFTER 5 MINUTES
@@ -110,7 +113,7 @@ namespace Sailing::Implementations {
 
                 // If we reached waypoint 0 and haven't started the timer yet
                 if (m_TargetWaypointIndex == 0 && !m_HoldTimerActive) {
-                    m_HoldStart = ElectronicsManager::Timekeeping->GetCurrentUtc().millisecond;
+                    m_HoldStart = ElectronicsManager::Timekeeping->GetCurrentUtc().minute;
                     m_HoldTimerActive = true;
                     Logger::Log(F("Hold timer started at waypoint 0"));
                 }
