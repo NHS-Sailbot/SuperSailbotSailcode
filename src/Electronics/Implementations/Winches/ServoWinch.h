@@ -7,12 +7,10 @@
 #include "Electronics/Types/Winch/WinchBase.h"
 
 namespace Electronics::Implementations::Winches {
-    class ServoWinch final : public Types::WinchBase {
+    class ServoWinch : public Types::WinchBase {
     public:
         ServoWinch(Types::ServoBase& servo, int fullOutAngle, int fullInAngle)
-            : m_Servo(servo),
-              m_FullOutAngle(fullOutAngle),
-              m_FullInAngle(fullInAngle) {}
+            : m_Servo(servo), m_FullOutAngle(fullOutAngle), m_FullInAngle(fullInAngle) {}
 
         double GetLetOutPercentage() override {
             return m_LetOutPercentage;
@@ -20,11 +18,14 @@ namespace Electronics::Implementations::Winches {
 
         void SetLetOutPercentage(double percent) override {
             m_LetOutPercentage = constrain(percent, 0.0, 100.0);
-            const int angle = static_cast<int>(m_FullInAngle + (m_LetOutPercentage / 100.0) * (m_FullOutAngle - m_FullInAngle));
-            m_Servo.SetAngle(angle);
+            m_Servo.SetAngle(GetAngle());
         }
 
-    private:
+    protected:
+        int GetAngle() const {
+            return static_cast<int>(m_FullInAngle + (m_LetOutPercentage / 100.0) * (m_FullOutAngle - m_FullInAngle));
+        }
+
         Types::ServoBase& m_Servo;
         int m_FullOutAngle;
         int m_FullInAngle;

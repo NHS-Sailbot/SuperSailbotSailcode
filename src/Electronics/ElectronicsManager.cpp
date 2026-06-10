@@ -11,6 +11,7 @@
 #include "Logging/Logger.h"
 #include <ArduinoJson.h>
 
+#include "Implementations/Winches/LimitSwitchCalibratedServoWinch.h"
 #include "Implementations/Winches/ServoWinch.h"
 #include "Implementations/WindSensors/FancyWindSensor.h"
 
@@ -24,9 +25,19 @@ namespace Electronics {
         Wire1.begin();
         Wire1.setClock(400000);
 
-        WinchServo = new Winches::ServoWinch(*new Servos::ArduinoServo(9, 3600), 1440, 2160);
-        MinLimitSwitchWinch = new InterruptLimitSwitchWithCallbacks(2);
-        MaxLimitSwitchWinch = new InterruptLimitSwitchWithCallbacks(3);
+        auto* minLimitSwitchWinch = new InterruptLimitSwitchWithCallbacks(2);
+        auto* maxLimitSwitchWinch = new InterruptLimitSwitchWithCallbacks(3);
+        MinLimitSwitchWinch = minLimitSwitchWinch;
+        MaxLimitSwitchWinch = maxLimitSwitchWinch;
+
+        WinchServo = new Winches::LimitSwitchCalibratedServoWinch(
+            *new Servos::ArduinoServo(9, 3600),
+            *minLimitSwitchWinch,
+            *maxLimitSwitchWinch,
+            1440,
+            2160
+        );
+
         JibWinchServo = new Winches::ServoWinch(*new Servos::ArduinoServo(11, 720), 720, 0); // Double check THIS
         RudderServo = new Servos::ArduinoServo(10, 180);
 
@@ -50,7 +61,9 @@ namespace Electronics {
                 .declination = 14.84,
 
                 .facingVector = {1.0f, 0.0f, 0.0f}
-            }, Wire1, 0x68);
+            },
+            Wire1, 0x68
+        );
 
         WindSensor = new WindSensors::FancyWindSensor(0.0, Serial3, 38400);
 
