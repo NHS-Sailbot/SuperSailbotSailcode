@@ -20,6 +20,14 @@ namespace Electronics::Types {
         attachInterrupt(digitalPinToInterrupt(m_LimitPin), staticLimitHit, CHANGE);
     }
 
+    bool LimitSwitchBase::IsPressed() const {
+        return digitalRead(m_LimitPin) == LOW;
+    }
+
+    bool LimitSwitchBase::IsOpen() const {
+        return digitalRead(m_LimitPin) == HIGH;
+    }
+
     void LimitSwitchBase::staticLimitHit() {
         for (LimitSwitchBase* limitSwitch : LimitSwitches) {
             const int currentState = digitalRead(limitSwitch->m_LimitPin);

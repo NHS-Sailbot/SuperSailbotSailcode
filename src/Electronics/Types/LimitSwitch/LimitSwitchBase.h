@@ -14,6 +14,12 @@ namespace Electronics::Types {
         /// Called when the limit switch is hit.
         virtual void LimitHit() = 0;
 
+        /// Returns true when the switch is pressed (pin LOW with INPUT_PULLUP).
+        bool IsPressed() const;
+
+        /// Returns true when the switch is open / not pressed (pin HIGH with INPUT_PULLUP).
+        bool IsOpen() const;
+
     private:
         inline static std::vector<LimitSwitchBase*> LimitSwitches = {};
         static void staticLimitHit();
